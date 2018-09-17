@@ -5,3 +5,7 @@ class User:
         self.type = type
         self.loggedIn = False
 
+    def getId(self):
+        return self.id
+    
+
