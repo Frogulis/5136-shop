@@ -1,6 +1,58 @@
 from UserInterface import UserInterface
 
 class InterfaceRequest:
+	"""Object representing a message passed between Controller and UserInterface
+	
+	~~~~~~~~~~~~~~~~~~~~~
+
+	To use, ensure that you've run these imports:
+	from InterfaceRequest import InterfaceRequest
+	from UserInterface import UserInterface
+	
+	To create, use the relevant factory method. Types of InterfaceRequests and their fields are
+	getLIST_DISPLAY(title, list_items, option_string, [aux])
+		title: the title of the page overall
+		list_items: the list of items in the format (item title, item desc)
+		aux: auxiliary field for whatever you like, displayed near bottom
+		option_string: available options to display for this page
+		single_input: the response from the UI will be placed here
+	getFORM_DISPLAY(title, fields, [aux]):
+		title: the title of the form overall
+		fields: 'questions' to pose to the user of form (question/field name, expected type)
+		aux: auxiliary field for whatever you like, displayed near bottom
+		inputs: list of inputs given, matching order of 'fields'
+	getITEM_DISPLAY(title, list_items, option_string, [aux]):
+		title: the title of the page overall
+		list_items: the list of items in format (item title, item desc)
+		aux: auxiliary field for whatever you like, displayed near bottom
+		option_string: available options to display for this page
+		single_input: the response from the UI will be placed here
+	getCONFIRM_DISPLAY(title, msg, [aux]):
+		title: the title of the confirmation dialog
+		msg: the message to display with the confirmation
+		aux: auxiliary field for whatever you like, displayed near bottom
+		response: the response from the UI will be placed here
+
+	Don't attempt to create your own InterfaceRequest(), as these methods will ensure they have the right
+	fields!
+	
+	~~~~~~~~~~~~~~~~~~~~~
+	
+	Once you have created your object, you may modify it if needed through the getField and setField
+	methods. These methods ensure that you only access and mutate fields that are actually present in
+	that object. For example, attempting to set the 'inputs' field of a LIST_DISPLAY will result in a TypeError,
+	as LIST_DISPLAYS have only a 'single_input', not an 'inputs' list.
+
+	~~~~~~~~~~~~~~~~~~~~~
+
+	Now that your InterfaceRequest is set up, you can display it and get the response back with a statement like:
+	my_list_request = UserInterface.display(my_list_request)
+
+	Assuming the object is properly set up, UserInterface will handle it and pass back the object with the user's
+	response in the relevant field, which can be accessed like so:
+	user_response = my_list_request.getField('single_input')
+	
+	"""
 	def __init__(self, my_dict):
 		self.d = my_dict
 

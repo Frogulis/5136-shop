@@ -1,4 +1,19 @@
 class UserInterface:
+	"""User interface boundary class
+
+	Users of this class only need to worry about these methods:
+
+	display(request)
+	This will take your InterfaceRequest and handle everything else.
+	Assuming the request is properly set up, this will return the request with
+	the user's response and you won't have to do anything else.
+
+	writeLine(s)
+	This will write a string to the output. Use sparingly, only when the prefab interfaces
+	are inadequate.
+	
+	"""
+
 	@classmethod
 	def writeLine(c, s):
 		c._printWhitespace(s)
