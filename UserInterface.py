@@ -65,4 +65,4 @@ class UserInterface:
 	def _printWhitespace(c, s, no_spaces=0, line_end='\n'):
 		for i in range(no_spaces):
 			print(' ', end='')
-		print(s)
+		print(s, end=line_end)

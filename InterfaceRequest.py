@@ -60,7 +60,7 @@ if __name__ == '__main__':
 		'Total 2 items')
 	ir = UserInterface.display(ir)
 	print('You said,', ir.getField('single_input'))
-	ir2 = InterfaceRequest.getCONFIRM_DISPLAY('Confirm whateer', 'Please confirm that you wish to proceed with the transaction', 'skjfhsdfjhdsk')
+	ir2 = InterfaceRequest.getCONFIRM_DISPLAY('Confirm whateer', 'Please confirm that you wish to proceed with the transaction')
 	ir2 = UserInterface.display(ir2)
 	print('You said,', ir2.getField('response'))
 	ir3 = InterfaceRequest.getFORM_DISPLAY('Registration: Please enter your details', [('Name', 'string'), ('Age', 'int')])
