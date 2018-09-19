@@ -51,6 +51,9 @@ class InterfaceRequest:
 		return output
 
 if __name__ == '__main__':
-	ir = InterfaceRequest.getLIST_DISPLAY('Search results', [('Bananas ea', '$1.00'), ('Bananas kg', '$10.00')], 'whatever')
+	ir = InterfaceRequest.getLIST_DISPLAY('Search results', [('Bananas ea', '$1.00'), ('Bananas kg', '$10.00')], 'X to exit, C to continue')
 	ir = UserInterface.display(ir)
-	print(ir.getField('single_input'))
+	print('You said,', ir.getField('single_input'))
+	ir2 = InterfaceRequest.getCONFIRM_DISPLAY('Confirm whateer', 'Please confirm that you wish to proceed with the transaction')
+	ir2 = UserInterface.display(ir2)
+	print('You said,', ir2.getField('response'))
