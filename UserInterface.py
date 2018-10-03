@@ -39,7 +39,7 @@ class UserInterface:
 		c._printWhitespace(s)
 
 	@classmethod
-	def _displayList(c, title, list_items, option_string, aux=None):
+	def displayList(c, title, list_items, option_string, aux=None):
 		c._printWhitespace(title)
 		for item in list_items:
 			c._printWhitespace(item[0], 2)
@@ -51,7 +51,7 @@ class UserInterface:
 		return i
 
 	@classmethod
-	def _displayConfirm(c, title, msg, aux=None):
+	def displayConfirm(c, title, msg, aux=None):
 		c._printWhitespace(title)
 		c._printWhitespace(msg, 2)
 		if aux is not None:
@@ -60,11 +60,11 @@ class UserInterface:
 		return i
 
 	@classmethod
-	def _displayItem(c, title, list_items, option_string, aux=None):
-		return c._displayList(title, list_items, option_string, aux)
+	def displayItem(c, title, list_items, option_string, aux=None):
+		return c.displayList(title, list_items, option_string, aux)
 
 	@classmethod
-	def _displayForm(c, title, fields, aux=None):
+	def displayForm(c, title, fields, aux=None):
 		c._printWhitespace(title)
 		inputs = []
 		for item in fields:
@@ -75,7 +75,7 @@ class UserInterface:
 		return inputs
 
 	@classmethod
-	def _displayError(c, string):
+	def displayError(c, string):
 		print("Error: ", string)
 		return None
 
@@ -88,8 +88,9 @@ class UserInterface:
 if __name__ == '__main__':
 	#testing
 	t1 = "A title"
-	t2 = "A veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\
-	eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
+	t2 = \
+"A veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\
+eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
 	li1 = [('Banana', 'Unit: ea, Source: QLD, Expiry date: 22/22/22, Price: $1'),
 			('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
 			('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10'),
@@ -101,7 +102,17 @@ if __name__ == '__main__':
 	f1 = [('Name', 'string'), ('Address', 'string'), ('Age', 'int')]
 	f2 = [('thing', 'string') for _ in range(10)]
 	o1 = 'X to exit, C to continue, W to whatever'
-	displayList(t1, li1, o1)
-	displayList(t2, li2, o1)
-	displayList(t1, li1, o1, 'some aux string')
-	
+
+	choice = input("which test u want:\n1. list\n2. form\n3. confirm")
+	if choice == '1':
+		print("u input: ", UserInterface.displayList(t1, li1, o1))
+		print("u input: ", UserInterface.displayList(t2, li2, o1))
+		print("u input: ", UserInterface.displayList(t1, li1, o1, 'some aux string'))
+	elif choice == '2':
+		print("u input: ", UserInterface.displayForm(t1, f1))
+		print("u input: ", UserInterface.displayForm(t2, f2, 'some aux'))
+	elif choice == '3':
+		print("u input: ", UserInterface.displayConfirm('Confirm purchase',
+			'Are you sure you\'d like to proceed?'))
+	else:
+		print("invalid choice")
