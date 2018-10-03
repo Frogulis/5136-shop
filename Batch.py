@@ -9,8 +9,8 @@ class Batch:
         self.shelfLife = shelfLife
 
 
-    def generateActualPrice(self):
-        pass
+    def generateActualPrice(self, originalPrice):
+        self.setActualPrice(originalPrice * self.getDiscount())
 
     def getActualPrice(self):
         return self.actualPrice
