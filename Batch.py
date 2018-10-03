@@ -2,7 +2,7 @@ import datetime
 class Batch:
     def __init__(self,batchID,actualPrice,quantity,shelfLife):
         self.batchID = batchID
-        self.expiryDate = datetime.date.today() + datetime.timedelta(days= shelfLife)
+        self.setExpiryDate(shelfLife)
         self.actualPrice = actualPrice
         self.quantity = quantity
 
@@ -15,9 +15,9 @@ class Batch:
     def getExpiryDate(self):
         return  self.expiryDate
 
-    #to setExpriryDate() be added or edited
-    def setExpiryDate(self,expiryDays):
-        self.expiryDate = datetime.date.today() + datetime.timedelta(days= expiryDays)
+    #to setExpiryDate() be added or edited
+    def setExpiryDate(self, daysTilExpiry):
+        self.expiryDate = datetime.date.today() + datetime.timedelta(days= daysTilExpiry)
 
     def getActualPrice(self):
         return self.actualPrice
