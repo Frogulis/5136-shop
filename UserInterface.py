@@ -3,10 +3,30 @@ class UserInterface:
 
 	Users of this class only need to worry about these methods:
 
-	display(request)
-	This will take your InterfaceRequest and handle everything else.
-	Assuming the request is properly set up, this will return the request with
-	the user's response and you won't have to do anything else.
+	displayList(title, list_items, option_string, [aux])
+		title: the title of the page overall
+		list_items: the list of items in the format (item title, item desc)
+		aux: auxiliary field for whatever you like, displayed near bottom
+		option_string: available options to display for this page
+		single_input: the response from the UI will be placed here
+	displayForm(title, fields, [aux]):
+		title: the title of the form overall
+		fields: 'questions' to pose to the user of form (question/field name, expected type)
+		aux: auxiliary field for whatever you like, displayed near bottom
+		inputs: list of inputs given, matching order of 'fields'
+	displayItem(title, list_items, option_string, [aux]):
+		title: the title of the page overall
+		list_items: the list of items in format (item title, item desc)
+		aux: auxiliary field for whatever you like, displayed near bottom
+		option_string: available options to display for this page
+		single_input: the response from the UI will be placed here
+	displayConfirm(title, msg, [aux]):
+		title: the title of the confirmation dialog
+		msg: the message to display with the confirmation
+		aux: auxiliary field for whatever you like, displayed near bottom
+		response: the response from the UI will be placed here
+	displayError(msg):
+		msg: the error message to display
 
 	writeLine(s)
 	This will write a string to the output. Use sparingly, only when the prefab interfaces
@@ -19,65 +39,80 @@ class UserInterface:
 		c._printWhitespace(s)
 
 	@classmethod
-	def display(c, request):
-		t = request.getField('type')
-		if t == 'LIST_DISPLAY':
-			return c._displayList(request)
-		elif t == 'CONFIRM_DISPLAY':
-			return c._displayConfirm(request)
-		elif t == 'FORM_DISPLAY':
-			return c._displayForm(request)
-		elif t == 'ITEM_DISPLAY':
-			return c._displayItem(request)
-		else:
-			return c._displayError(request)
-
-	@classmethod
-	def _displayList(c, request):
-		c._printWhitespace(request.getField('title'))
-		for item in request.getField('list_items'):
+	def displayList(c, title, list_items, option_string, aux=None):
+		c._printWhitespace(title)
+		for item in list_items:
 			c._printWhitespace(item[0], 2)
 			c._printWhitespace(item[1], 4)
-		if request.getField('aux') is not None:
-			c._printWhitespace(request.getField('aux'), 2)
-		c._printWhitespace(request.getField('option_string'))
+		if aux is not None:
+			c._printWhitespace(aux, 2)
+		c._printWhitespace(option_string)
 		i = input('Please input option: ')
-		request.setField('single_input', i)
-		return request
+		return i
 
 	@classmethod
-	def _displayConfirm(c, request):
-		c._printWhitespace(request.getField('title'))
-		c._printWhitespace(request.getField('msg'), 2)
-		if request.getField('aux') is not None:
-			c._printWhitespace(request.getField('aux'), 2)
+	def displayConfirm(c, title, msg, aux=None):
+		c._printWhitespace(title)
+		c._printWhitespace(msg, 2)
+		if aux is not None:
+			c._printWhitespace(aux, 2)
 		i = input('y/n or blank to cancel: ')
-		request.setField('response', i)
-		return request
+		return i
 
 	@classmethod
-	def _displayItem(c, request):
-		return c._displayList(request)
+	def displayItem(c, title, list_items, option_string, aux=None):
+		return c.displayList(title, list_items, option_string, aux)
 
 	@classmethod
-	def _displayForm(c, request):
-		c._printWhitespace(request.getField('title'))
+	def displayForm(c, title, fields, aux=None):
+		c._printWhitespace(title)
 		inputs = []
-		for item in request.getField('fields'):
+		for item in fields:
 			c._printWhitespace(item[0], 2)
 			inputs.append(input())
-		request.setField('inputs', inputs)
-		if request.getField('aux') is not None:
-			c._printWhitespace(request.getField('aux'), 2)
-		return request
+		if aux is not None:
+			c._printWhitespace(aux, 2)
+		return inputs
 
 	@classmethod
-	def _displayError(c, request):
-		print("Couldn't display request of type ", request.getField('type'))
-		return request
+	def displayError(c, string):
+		print("Error: ", string)
+		return None
 
 	@classmethod
 	def _printWhitespace(c, s, no_spaces=0, line_end='\n'):
 		for i in range(no_spaces):
 			print(' ', end='')
 		print(s, end=line_end)
+
+if __name__ == '__main__':
+	#testing
+	t1 = "A title"
+	t2 = \
+"A veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\
+eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
+	li1 = [('Banana', 'Unit: ea, Source: QLD, Expiry date: 22/22/22, Price: $1'),
+			('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
+			('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10'),
+			('Marijuana', 'Unit: kg, Source: Himalayas, Expiry date: 22/22/22, Price: $5000')]
+	li2 = [('Banalongboynananananananananananananananananananananananananana\
+		nananananananana', 'Unit: ea, Source: QLD, Expiry date: 22/22/22, Price: $1'),
+			('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
+			('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10')]
+	f1 = [('Name', 'string'), ('Address', 'string'), ('Age', 'int')]
+	f2 = [('thing', 'string') for _ in range(10)]
+	o1 = 'X to exit, C to continue, W to whatever'
+
+	choice = input("which test u want:\n1. list\n2. form\n3. confirm")
+	if choice == '1':
+		print("u input: ", UserInterface.displayList(t1, li1, o1))
+		print("u input: ", UserInterface.displayList(t2, li2, o1))
+		print("u input: ", UserInterface.displayList(t1, li1, o1, 'some aux string'))
+	elif choice == '2':
+		print("u input: ", UserInterface.displayForm(t1, f1))
+		print("u input: ", UserInterface.displayForm(t2, f2, 'some aux'))
+	elif choice == '3':
+		print("u input: ", UserInterface.displayConfirm('Confirm purchase',
+			'Are you sure you\'d like to proceed?'))
+	else:
+		print("invalid choice")
