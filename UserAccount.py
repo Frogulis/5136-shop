@@ -3,6 +3,7 @@ class UserAccount:
         self.id = id
         self.name = name
         self.loggedIn = False
+        self.password = ""
 
     def getId(self):
         return self.id
