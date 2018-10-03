@@ -58,13 +58,5 @@ class ShoppingCart:
             totalPrice += singlePrice
         return totalPrice
 
-    # To get the total price of the shopping cart.
-    def getTotalPrice(self):
-        totalPrice = 0.00
-        for tuple in self.productsInCart:
-            singlePrice = tuple[1] * tuple[2]
-            totalPrice += singlePrice
-        return totalPrice
-
     def setProductsInCart(self,newTuple):
         self.productsInCart = newTuple
