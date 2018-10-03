@@ -84,3 +84,24 @@ class UserInterface:
 		for i in range(no_spaces):
 			print(' ', end='')
 		print(s, end=line_end)
+
+if __name__ == '__main__':
+	#testing
+	t1 = "A title"
+	t2 = "A veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\
+	eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
+	li1 = [('Banana', 'Unit: ea, Source: QLD, Expiry date: 22/22/22, Price: $1'),
+			('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
+			('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10'),
+			('Marijuana', 'Unit: kg, Source: Himalayas, Expiry date: 22/22/22, Price: $5000')]
+	li2 = [('Banalongboynananananananananananananananananananananananananana\
+		nananananananana', 'Unit: ea, Source: QLD, Expiry date: 22/22/22, Price: $1'),
+			('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
+			('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10')]
+	f1 = [('Name', 'string'), ('Address', 'string'), ('Age', 'int')]
+	f2 = [('thing', 'string') for _ in range(10)]
+	o1 = 'X to exit, C to continue, W to whatever'
+	displayList(t1, li1, o1)
+	displayList(t2, li2, o1)
+	displayList(t1, li1, o1, 'some aux string')
+	
