@@ -46,12 +46,11 @@ class Product:
 	def getShelfLife(self):
 		return self.shelfLife
 
-    def getBatch(self,batchID):
-        for batch in self.batches:
-        if batchID == batch.getBatchID():
-                return batch
-        raise Exception("Batch does not exist.")
-
+	def getBatch(self,batchID):
+		for batch in self.batches:
+			if batchID == batch.getBatchID():
+				return batch
+			raise Exception("Batch does not exist.")
 
 	def calculateTotalQuantity(self):
 		total = 0.00
@@ -73,4 +72,6 @@ class Product:
 				total += batch.getQuantity()
 		return total
 
-	
+	def discount(self):
+
+		pass
