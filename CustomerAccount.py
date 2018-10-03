@@ -2,7 +2,7 @@ import UserAccount
 
 
 class CustomerAccount(UserAccount.UserAccount):
-    def __init__(self,ID, password, name, phoneNumber, address, shoppingCart, balance=0, loggedIn=False):
+    def __init__(self, ID, password, name, phoneNumber, address, shoppingCart, balance=0, loggedIn=False):
         super(CustomerAccount, self).__init__(ID, name, password, loggedIn)
         self.phoneNumber = phoneNumber
         self.address = address
