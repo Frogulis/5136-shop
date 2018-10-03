@@ -48,7 +48,7 @@ class Product:
 
     def getBatch(self,batchID):
         for batch in self.batches:
-        if batchID == batch.getBatchID():
+            if batchID == batch.getBatchID():
                 return batch
         raise Exception("Batch does not exist.")
 
