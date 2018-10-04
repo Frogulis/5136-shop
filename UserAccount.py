@@ -28,5 +28,11 @@ class UserAccount:
 
     def setLoggedIn(self, newStatus):
         self.loggedIn = newStatus
+
+    def logIn(self, uPwd):
+        if self.getPassword() == uPwd:
+            self.setLoggedIn(True)
+        else:
+            raise Exception("Invalid password")
     
 
