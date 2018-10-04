@@ -1,9 +1,9 @@
-import Product
+
 class ShoppingCart:
 
     # tuple = (productId, actualPrice, quantity)
-    def __init__(self, tuple = ("",0.00,0.00)):
-        self.productsInCart = [tuple]
+    def __init__(self):
+        self.productsInCart = []
 
     def addToShoppingCart(self, tupleToBeAdded):
         self.productsInCart.append(tupleToBeAdded)
