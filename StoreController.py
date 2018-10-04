@@ -1,4 +1,6 @@
 import Store
+from UserAccount import UserAccount
+from CustomerAccount import CustomerAccount
 
 class StoreController:
     def __init__(self):
@@ -35,5 +37,17 @@ class StoreController:
         pass  # TODO
 
     def viewProduct(self):
+        pass    #TODO
 
+    def register(self, name, pwd, phone, address, loggedIn=False):
+        uid = Store.Store.generateNewCustomerId()
+        UserAccount.setId(uid)
+        UserAccount.setName(name)
+        UserAccount.setPassword(pwd)
+        UserAccount.setLoggedIn(True)
+        CustomerAccount.setPhoneNumber(phone)
+        CustomerAccount.setAddress(address)
+        CustomerAccount.setShoppingCart(None)
+        CustomerAccount.setBalance(0.00)
+        CustomerAccount.setLoggedIn(True)
 
