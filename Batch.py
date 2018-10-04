@@ -1,6 +1,6 @@
 import datetime
 class Batch:
-    def __init__(self,batchID,actualPrice,quantity,shelfDate, shelfLife):
+    def __init__(self,batchID = "",actualPrice = 0.00,quantity=0.00,shelfDate=None, shelfLife=0):
         self.batchID = batchID
         self.shelfDate = shelfDate
         self.actualPrice = actualPrice
