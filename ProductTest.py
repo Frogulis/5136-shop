@@ -31,6 +31,14 @@ class ProductTest(unittest.TestCase):
         assert self.p1.calculateNonDiscountQuantity() == 8, str(self.p1.calculateNonDiscountQuantity())
         assert self.p1.calculateDiscountQuantity() == 10, str(self.p1.calculateDiscountQuantity())
 
+    def test5(self):
+        p = Product()
+        prev = p.generateBatchId()
+        for _ in range(10):
+            a = p.generateBatchId()
+            self.assertTrue(a != prev)
+            prev = a
+
 if __name__ == '__main__':
     test = ProductTest()
     suite = unittest.TestLoader().loadTestsFromModule(test)
