@@ -3,42 +3,41 @@ import datetime
 
 class Product:
     def __init__(self, pid="", name="", unit="ea",
-            originalPrice=0.00, source="", shelfLife=0, batches=[], batchIdCounter=0):
+            originalPrice=0.00, source="", shelfLife=0, batches=None, batchIdCounter=0):
         self.id = pid
         self.name = name
         self.unit = unit
         self.originalPrice = originalPrice
         self.source = source
         self.shelfLife = shelfLife
-        self.batches = batches
+        if batches is None:
+            self.batches = []
+        else:
+            self.batches = batches
         self.batchIdCounter = batchIdCounter
 
     def addBatch(self, quantity):
-        batch = Batch.Batch()
-        batch.batchID = self.generateBatchId()
-        batch.actualPrice = self.originalPrice
-        batch.quantity = quantity
-        batch.shelfLife = self.shelfLife
-        batch.shelfDate = datetime.datetime.now()
+        batch = Batch.Batch(self.generateBatchId(), self.originalPrice, quantity, datetime.date.today(), self.shelfLife)
         self.batches.append(batch)
 
     # Please check if there is enough stock before using this method,
     # there is no validation in this method.
     def deductStock(self,actualPrice,quantity):
         remainingQuantity = quantity
-        batchIndex = 0
-        while remainingQuantity > 0 and batchIndex < len(self.batches):
+        for batchIndex in range(len(self.batches)):
             currentBatch = self.batches[batchIndex]
             if currentBatch.actualPrice == actualPrice:
                 if currentBatch.quantity == remainingQuantity:
                     remainingQuantity = 0
-                    del self.batches[currentBatch]
+                    del self.batches[batchIndex]
+                    break
                 elif currentBatch.quantity > remainingQuantity:
                     currentBatch.setQuantity(currentBatch.quantity - remainingQuantity)
                     remainingQuantity = 0
+                    break
                 elif currentBatch.quantity < remainingQuantity:
-                    del self.batches[currentBatch]
                     remainingQuantity -= currentBatch.quantity
+                    del self.batches[batchIndex]
                     batchIndex += 1
             else:
                 batchIndex += 1

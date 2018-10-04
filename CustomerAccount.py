@@ -1,13 +1,14 @@
 import UserAccount
+from ShoppingCart import ShoppingCart
 
 
 class CustomerAccount(UserAccount.UserAccount):
-    def __init__(self, ID, password, name, phoneNumber, address, shoppingCart, balance=0, loggedIn=False):
-        super(CustomerAccount, self).__init__(ID, name, password, loggedIn)
+    def __init__(self, ID, password, name, phoneNumber, address, balance=0):
+        super(CustomerAccount, self).__init__(ID, name, password)
         self.phoneNumber = phoneNumber
         self.address = address
         self.balance = balance
-        self.shoppingCart = shoppingCart
+        self.shoppingCart = ShoppingCart()
 
     def getPhoneNumber(self):
         return self.phoneNumber
