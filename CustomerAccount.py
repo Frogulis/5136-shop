@@ -22,7 +22,7 @@ class CustomerAccount(UserAccount.UserAccount):
         self.address = newAddress
 
     def getBalance(self):
-        return "{0:.2f}".format(round(self.balance,2))
+        return self.balance
 
     def setBalance(self, newBalance):
         self.balance = round(newBalance,2)
@@ -37,7 +37,11 @@ class CustomerAccount(UserAccount.UserAccount):
         self.balance += round(enteredAmount, 2)
 
     def subtractBalance(self, subtractAmount):
-        self.balance -= subtractAmount
+        if self.balance - subtractAmount >= 0:
+            self.balance -= subtractAmount
+        else:
+            raise Exception("Insufficient Funds")
+
 
 
 if __name__ == '__main__':

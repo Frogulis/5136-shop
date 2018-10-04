@@ -33,6 +33,8 @@ class UserAccount:
         if self.getPassword() == uPwd:
             self.setLoggedIn(True)
         else:
+            self.setLoggedIn(False)
             raise Exception("Invalid password")
+
     
 
