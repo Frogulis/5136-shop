@@ -24,19 +24,20 @@ class Product:
     # there is no validation in this method.
     def deductStock(self,actualPrice,quantity):
         remainingQuantity = quantity
-        batchIndex = 0
-        while remainingQuantity > 0 and batchIndex < len(self.batches):
+        for batchIndex in range(len(self.batches)):
             currentBatch = self.batches[batchIndex]
             if currentBatch.actualPrice == actualPrice:
                 if currentBatch.quantity == remainingQuantity:
                     remainingQuantity = 0
                     del self.batches[batchIndex]
+                    break
                 elif currentBatch.quantity > remainingQuantity:
                     currentBatch.setQuantity(currentBatch.quantity - remainingQuantity)
                     remainingQuantity = 0
+                    break
                 elif currentBatch.quantity < remainingQuantity:
-                    del self.batches[batchIndex]
                     remainingQuantity -= currentBatch.quantity
+                    del self.batches[batchIndex]
                     batchIndex += 1
             else:
                 batchIndex += 1

@@ -25,6 +25,12 @@ class ProductTest(unittest.TestCase):
         assert self.p1.calculateDiscountQuantity() == 10, str(self.p1.calculateDiscountQuantity())
         assert self.p2.calculateDiscountQuantity() == 0, str(self.p2.calculateDiscountQuantity())
 
+    def test4(self):
+        self.p1.deductStock(self.p1.getOriginalPrice(), 7)
+        assert self.p1.calculateTotalQuantity() == 18, str(self.p1.calculateTotalQuantity())
+        assert self.p1.calculateNonDiscountQuantity() == 8, str(self.p1.calculateNonDiscountQuantity())
+        assert self.p1.calculateDiscountQuantity() == 10, str(self.p1.calculateDiscountQuantity())
+
 if __name__ == '__main__':
     test = ProductTest()
     suite = unittest.TestLoader().loadTestsFromModule(test)
