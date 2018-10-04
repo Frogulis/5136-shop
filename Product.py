@@ -42,7 +42,6 @@ class Product:
             else:
                 batchIndex += 1
 
-
     def setId(self, my_id):
         self.id = my_id
 
@@ -89,6 +88,9 @@ class Product:
             if batchID == batch.getBatchID():
                 return batch
             raise Exception("Batch does not exist.")
+
+    def getBatches(self):
+        return self.batches
 
     def calculateTotalQuantity(self):
         total = 0.00

@@ -1,6 +1,6 @@
 import UserAccount
 
 
-class OwnerAccount(UserAccount):
+class OwnerAccount(UserAccount.UserAccount):
 	pass
 
