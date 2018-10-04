@@ -2,15 +2,16 @@ import Batch
 import datetime
 
 class Product:
-    def __init__(self):
-        self.id = ""
-        self.name = ""
-        self.unit = "ea"
-        self.originalPrice = 0.00
-        self.source = ""
-        self.shelfLife = 0
-        self.batches = []
-        self.batchIdCounter = 0
+    def __init__(self, pid="", name="", unit="ea",
+            originalPrice=0.00, source="", shelfLife=0, batches=[], batchIdCounter=0):
+        self.id = pid
+        self.name = name
+        self.unit = unit
+        self.originalPrice = originalPrice
+        self.source = source
+        self.shelfLife = shelfLife
+        self.batches = batches
+        self.batchIdCounter = batchIdCounter
 
     def addBatch(self, quantity):
         batch = Batch.Batch()
@@ -87,7 +88,7 @@ class Product:
         for batch in self.batches:
             if batchID == batch.getBatchID():
                 return batch
-            raise Exception("Batch does not exist.")
+        raise Exception("Batch does not exist.")
 
     def getBatches(self):
         return self.batches
@@ -112,5 +113,6 @@ class Product:
                 total += batch.getQuantity()
         return total
 
-    def discount(self):
-        pass
+    def updateDiscount(self):
+        for batch in self.batches:
+            batch.setActualPrice(batch.getDiscount() * self.originalPrice)
