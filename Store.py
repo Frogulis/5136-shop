@@ -1,3 +1,7 @@
+import Order
+import Product
+
+
 class Store:
     def __init__(self, products, customers, owner, orderHistory):
         self.products = products
@@ -33,30 +37,25 @@ class Store:
         orders = self.getOrders()
         return orders[orderID]
 
-    def editProduct(self, productID):
-        product = [{'ProductID': '1', 'ProductName': 'Apples', 'Unit': 'kg', 'originalPrice': 3.99
-                    , 'Source': 'unknown', 'ShelfLife': 7,
-                   'Batches': [{'BatchId': 'Apples1', 'ExpiryDate': '15/10/18', 'Quantity': 5}]}
-            , {'ProductID': '2', 'ProductName': 'Bananas', 'Unit': 'kg', 'originalPrice': 3.99
-                    , 'Source': 'unknown', 'ShelfLife': 7,
-                   'Batches': [{'BatchId': 'Apples1', 'ExpiryDate': '15/10/18', 'Quantity': 5}]}
-            , {'ProductID': '3', 'ProductName': 'Strawberries', 'Unit': 'kg', 'originalPrice': 3.99
-                    , 'Source': 'unknown', 'ShelfLife': 7,
-                   'Batches': [{'BatchId': 'Apples1', 'ExpiryDate': '15/10/18', 'Quantity': 5}]}
-            , {'ProductID': '4', 'ProductName': 'Apples (bag)', 'Unit': 'ea', 'originalPrice': 3.99
-                    , 'Source': 'unknown', 'ShelfLife': 7,
-                   'Batches': [{'BatchId': 'Apples1', 'ExpiryDate': '15/10/18', 'Quantity': 5}]}
-            , {'ProductID': '5', 'ProductName': 'Kiwi', 'Unit': 'kg', 'originalPrice': 3.99
-                    , 'Source': 'unknown', 'ShelfLife': 7,
-                   'Batches': [{'BatchId': 'Apples1', 'ExpiryDate': '15/10/18', 'Quantity': 5}]}]
+    def getOrders(self):
+        return Order()
+
+    def searchProduct(self, productID):
+        products = self.getProduct()
+        product = products[productID]
+
+    def getProduct(self):
+        return Product()
 
 
 if __name__ == '__main__':
+    # put parameters to create Store object
     products = ["Apple", "Banana", "Orange"]
     customers = ["C1000", "C1001", "C1002", "C1003"]
     owner = "O1500"
     orderHistory = [{"C1000": "Order1"}, {"C1002": "Order2"}]
 
+    # create object
     c = Store(products, customers, owner, orderHistory)
 
     print (c.getParticularOrder('Order3'));
