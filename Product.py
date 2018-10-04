@@ -105,7 +105,7 @@ class Product:
                 total += batch.getQuantity()
         return total
 
-    def calculateDiscountQuality(self):
+    def calculateDiscountQuantity(self):
         total = 0.00
         for batch in self.batches:
             if batch.getActualPrice() != self.getOriginalPrice():
