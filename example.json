@@ -1,0 +1,68 @@
+{
+    "order_history": {
+        "C1000" : [
+            {
+                "orderID" : "C1000001",
+                "customerID" : "C1000",
+                "shoppingCart"  : [
+                    ["1", 1.23, 7.0],
+                    ["2", 2.34, 1.0]
+                ],
+                "price" : 3.57,
+                "transactionDate": "04/10/18"
+            },
+            {
+                "orderID" : "C1000002",
+                "customerID" : "C1000",
+                "shoppingCart"  : [
+                    ["1", 1.23, 7.0], //self.orderHistory['C1003'] -> [Order]
+                    ["2", 2.34, 1.0]
+                ],
+                "price" : 3.57,
+                "transactionDate": "04/10/18"
+            },
+            {
+                "orderID" : "C1000003",
+                "customerID" : "C1000",
+                "shoppingCart"  : [
+                    ["1", 1.23, 7.0],
+                    ["2", 2.34, 1.0]
+                ],
+                "price" : 3.57,
+                "transactionDate": "04/10/18"
+            }
+        ],
+        "C1003" : [
+            {
+                "orderID" : "C1003001",
+                "customerID" : "C1000",
+                "shoppingCart"  : [
+                    ["1", 1.23, 7.0],
+                    ["2", 2.34, 1.0]
+                ],
+                "price" : 3.57,
+                "transactionDate": "04/10/18"
+            },
+            {
+                "orderID" : "C1003002",
+                "customerID" : "C1000",
+                "shoppingCart"  : [
+                    ["1", 1.23, 7.0],
+                    ["2", 2.34, 1.0]
+                ],
+                "price" : 3.57,
+                "transactionDate": "04/10/18"
+            },
+            {
+                "orderID" : "C1003003",
+                "customerID" : "C1000",
+                "shoppingCart"  : [
+                    ["1", 1.23, 7.0],
+                    ["2", 2.34, 1.0]
+                ],
+                "price" : 3.57,
+                "transactionDate": "04/10/18"
+            }
+        ]
+    }
+}

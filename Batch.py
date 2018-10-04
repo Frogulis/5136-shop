@@ -1,12 +1,16 @@
 import datetime
 class Batch:
-    def __init__(self,batchID,actualPrice,quantity,shelfDate, shelfLife):
+    def __init__(self,batchID = "",actualPrice = 0.00,quantity=0.00,shelfDate=None, shelfLife=0):
         self.batchID = batchID
         self.shelfDate = shelfDate
         self.actualPrice = actualPrice
         self.quantity = quantity
         self.setExpiryDate(shelfLife)
         self.shelfLife = shelfLife
+
+
+    def generateActualPrice(self, originalPrice):
+        self.setActualPrice(originalPrice * self.getDiscount())
 
     def getActualPrice(self):
         return self.actualPrice
@@ -15,7 +19,10 @@ class Batch:
         return self.batchID
 
     def getDiscount(self):
-        pass
+        if self.expiryDate - self.shelfDate > datetime.timedelta(days = 7):
+            return 1.0
+        else:
+            return 0.3 + 0.6 * ((self.expiryDate - self.shelfDate).days / 7)
 
     def getExpiryDate(self):
         return self.expiryDate
@@ -41,3 +48,7 @@ class Batch:
     def setQuantity(self, quantity):
         self.quantity = quantity
 
+if __name__ == '__main__':
+    bs = [Batch(23, 1.00, 20, datetime.date.today(), i) for i in range(0, 10)]
+    for b in bs:
+        print(b.getDiscount())
