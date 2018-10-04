@@ -19,10 +19,10 @@ class Batch:
         return self.batchID
 
     def getDiscount(self):
-        if self.expiryDate - self.shelfDate > datetime.timedelta(days = 7):
+        if self.expiryDate - datetime.date.today() > datetime.timedelta(days = 7):
             return 1.0
         else:
-            return 0.3 + 0.6 * ((self.expiryDate - self.shelfDate).days / 7)
+            return 0.3 + 0.6 * ((self.expiryDate - datetime.date.today()).days / 7)
 
     def getExpiryDate(self):
         return self.expiryDate
