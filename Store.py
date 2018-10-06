@@ -28,6 +28,25 @@ class Store:
             return str(1)
         return str(int(self.customers[-1].getId())+1)
 
+    def editCustomerName(self, customerId, newName):
+        customerToBeEdit = self.getCustomer(customerId)
+        customerToBeEdit.setName(newName)
+
+    def editCustomerPassword(self, customerId, newPassWord):
+        customerToBeEdit = self.getCustomer(customerId)
+        customerToBeEdit.setPassword(newPassWord)
+
+    def editCustomerPhoneNumber(self, customerId, newPhoneNumber):
+        customerToBeEdit = self.getCustomer(customerId)
+        customerToBeEdit.setPhoneNumber(newPhoneNumber)
+
+    def editCustomerAddress(self, customerId, newAddress):
+        customerToBeEdit = self.getCustomer(customerId)
+        customerToBeEdit.setAddress(newAddress)
+
+    def editCustomerBalance(self, customerId, newBalance):
+        customerToBeEdit = self.getCustomer(customerId)
+        customerToBeEdit.setBalance(newBalance)
 
     def editProductName(self, productId, newName):
         productToBeEdited = self.getProduct(productId)
@@ -100,6 +119,17 @@ class Store:
     def setOrderHistory(self, allOrders):
         self.orderHistory = allOrders
 
+    # All Order History as a whole list
+    def getOrderHistoryAsList(self):
+        orderHistoryList = []
+        for key in self.orderHistory.keys():
+            orderHistoryList.extend(self.orderHistory[key])
+        return orderHistoryList
+
+    def getCustomerOrders(self,customerId):
+        orders = self.orderHistory[customerId]
+        return orders
+
     def getParticularOrder(self, customerId, orderId):
         orders = self.orderHistory[customerId]
         for order in orders:
@@ -107,8 +137,7 @@ class Store:
                 return order
         raise Exception("Order does not exist.")
 
-
-    def searchProductByName(self, keyword):  # TODO
+    def searchProductByName(self, keyword):
         keyword.lower()
         matchingProducts = []
         for product in self.products:
