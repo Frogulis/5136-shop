@@ -101,8 +101,11 @@ class StoreController:
     def searchProduct(self):
         pass  # TODO
 
-    def viewProduct(self):
+    def viewProduct(self, productId):
         pass    #TODO
+
+    def browseProducts(self):
+        return Store.products
 
     def register(self, name, pwd, phone, address, loggedIn=False):
         uid = Store.Store.generateNewCustomerId()
