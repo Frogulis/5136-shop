@@ -1,4 +1,4 @@
-import Order
+from Order import Order
 from Product import Product
 from CustomerAccount import CustomerAccount
 
@@ -23,10 +23,21 @@ class Store:
         newCustomer = CustomerAccount(id, password, name, phoneNum, address)
         self.customers.append(newCustomer)
 
+    def addOrder(self, customerId, sCart=None, tPrice=0.0, tDate=datetime.datetime.now()):
+        nid = self.generateNewOrderId(customerId)
+        newOrder = Order(nid, customerId, sCart, tPrice, tDate)
+        self.orderHistory[customerId].append(newOrder)
+
     def generateNewCustomerId(self):
         if len(self.customers) == 0:
             return str(1)
         return str(int(self.customers[-1].getId())+1)
+
+    def generateNewOrderId(self, cid):
+        if len(self.orderHistory[cid]) == 0:
+            return str(1)
+        else:
+            return str(int(self.orderHistory[cid][-1].getId()) + 1)
 
     def editCustomerName(self, customerId, newName):
         customerToBeEdit = self.getCustomer(customerId)
