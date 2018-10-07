@@ -24,6 +24,8 @@ class Store:
         self.customers.append(newCustomer)
 
     def addOrder(self, customerId, sCart=None, tPrice=0.0, tDate=datetime.datetime.now()):
+        if customerId not in self.orderHistory:
+            self.orderHistory[customerId] = []
         nid = self.generateNewOrderId(customerId)
         newOrder = Order(nid, customerId, sCart, tPrice, tDate)
         self.orderHistory[customerId].append(newOrder)
@@ -37,7 +39,7 @@ class Store:
         if len(self.orderHistory[cid]) == 0:
             return str(1)
         else:
-            return str(int(self.orderHistory[cid][-1].getId()) + 1)
+            return str(int(self.orderHistory[cid][-1].getOrderId()) + 1)
 
     def editCustomerName(self, customerId, newName):
         customerToBeEdit = self.getCustomer(customerId)
