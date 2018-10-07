@@ -32,19 +32,23 @@ class ShoppingCart:
             raise Exception("Parameter should be a float or integer.")
         return floated
 
-    def deleteFromShoppingCart(self, tupleToBeDeleted):
-        del self.productsInCart[tupleToBeDeleted]
+    def deleteFromShoppingCart(self, itemToBeDeleted):
+        for i in range(len(self.productsInCart)):
+            if self.productsInCart[i] == itemToBeDeleted:
+                del self.productsInCart[i]
 
     def deleteFromShoppingCart(self, productId, actualPrice = 0.00):
         actualPrice = self._convertToFloat(actualPrice)
         found = False
-        for item in self.productsInCart:
+        for i in range(len(self.productsInCart)):
+            item = self.productsInCart[i]
             if item[0] == productId and item[1] == actualPrice:
-                del self.productsInCart[item]
+                del self.productsInCart[i]
+                found = True
         if not found:
             raise Exception("Product Id or Actual Price is invalid.")
 
-    # To get one particular product tuple
+    # To get one particular product item
     def getProductInCart(self, productId):
         for item in self.productsInCart:
             if productId == item[0]:
