@@ -1,4 +1,4 @@
-import Order
+from Order import Order
 from Product import Product
 from CustomerAccount import CustomerAccount
 
@@ -14,19 +14,32 @@ class Store:
         self.orderHistory = {}
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
-        id = self.generateNewProductId()
-        newProduct = Product(id, name, unit, originalPrice, source, shelfLife)
+        pid = self.generateNewProductId()
+        newProduct = Product(pid, name, unit, originalPrice, source, shelfLife)
         self.products.append(newProduct)
 
     def addCustomer(self, password, name, phoneNum, address):
-        id = self.generateNewCustomerId()
-        newCustomer = CustomerAccount(id, password, name, phoneNum, address)
+        cid = self.generateNewCustomerId()
+        newCustomer = CustomerAccount(cid, password, name, phoneNum, address)
         self.customers.append(newCustomer)
+
+    def addOrder(self, customerId, sCart=None, tPrice=0.0, tDate=datetime.datetime.now()):
+        if customerId not in self.orderHistory:
+            self.orderHistory[customerId] = []
+        nid = self.generateNewOrderId(customerId)
+        newOrder = Order(nid, customerId, sCart, tPrice, tDate)
+        self.orderHistory[customerId].append(newOrder)
 
     def generateNewCustomerId(self):
         if len(self.customers) == 0:
             return str(1)
         return str(int(self.customers[-1].getId())+1)
+
+    def generateNewOrderId(self, cid):
+        if len(self.orderHistory[cid]) == 0:
+            return str(1)
+        else:
+            return str(int(self.orderHistory[cid][-1].getOrderId()) + 1)
 
     def editCustomerName(self, customerId, newName):
         customerToBeEdit = self.getCustomer(customerId)
@@ -138,7 +151,7 @@ class Store:
         raise Exception("Order does not exist.")
 
     def searchProductByName(self, keyword):
-        keyword.lower()
+        keyword = keyword.lower().strip()
         matchingProducts = []
         for product in self.products:
             searchingProductName = product.getName().lower()

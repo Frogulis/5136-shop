@@ -3,7 +3,7 @@ from ShoppingCart import ShoppingCart
 
 
 class CustomerAccount(UserAccount.UserAccount):
-    def __init__(self, ID, password, name, phoneNumber, address, balance=0):
+    def __init__(self, ID, password, name, phoneNumber, address, shoppingCart=None, balance=0):
         super(CustomerAccount, self).__init__(ID, name, password)
         self.phoneNumber = phoneNumber
         self.address = address
@@ -26,7 +26,7 @@ class CustomerAccount(UserAccount.UserAccount):
         return self.balance
 
     def setBalance(self, newBalance):
-        self.balance = round(newBalance,2)
+        self.balance = round(newBalance, 2)
 
     def getShoppingCart(self):
         return self.shoppingCart
@@ -44,10 +44,6 @@ class CustomerAccount(UserAccount.UserAccount):
             raise Exception("Insufficient Funds")
 
 
-
 if __name__ == '__main__':
     c = CustomerAccount('1234', 'passwd', 'Amy Farah Fowler', '123456789', 'Monash Uni', None, 10, False)
-
-    c.topUp(100.00);
-    print (c.getBalance());
 
