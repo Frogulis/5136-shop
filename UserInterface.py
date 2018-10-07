@@ -86,24 +86,33 @@ class UserInterface:
 
 	@classmethod
 	def tryInput(c, field):
-			while True:
-				newInput = input()
-				try:
-					if field[1] == 'int' and float(newInput) != round(float(newInput), 0):
-						c.displayError('Please enter a valid whole number')
-					elif field[1] == 'number':
-						float(newInput)
-					elif field[1] == 'money' and float(newInput) != round(float(newInput), 2):
-						c.displayError('Please enter a money value with 2 decimal places')
-					elif field[1] == 'nstring' and newInput.strip() == "":
-						c.displayError('Please enter a non-whitespace response')
-					elif field[1] == 'yn' and newInput.lower().strip() not in ['y', 'n']:
-						c.displayError("Please enter either 'y' or 'n'")
-					else:
-						return newInput
-					
-				except ValueError:
+		def isNumber(s):
+			try:
+				float(s)
+				return True
+			except ValueError:
+				return False
+
+		if field[1] not in ['int', 'number', 'money', 'nstring', 'string', 'yn']:
+			raise ValueError('Invalid field type:' + str(field[1]))
+		while True:
+			newInput = input()
+			try:
+				if field[1] == 'int' and float(newInput) != round(float(newInput), 0):
+					c.displayError('Please enter a valid whole number')
+				elif field[1] == 'number' and not isNumber(newInput):
 					c.displayError('Please enter a valid numerical value')
+				elif field[1] == 'money' and float(newInput) != round(float(newInput), 2):
+					c.displayError('Please enter a money value with 2 decimal places')
+				elif field[1] == 'nstring' and newInput.strip() == "":
+					c.displayError('Please enter a non-whitespace response')
+				elif field[1] == 'yn' and newInput.lower().strip() not in ['y', 'n']:
+					c.displayError("Please enter either 'y' or 'n'")
+				else:
+					return newInput
+				
+			except ValueError:
+				c.displayError('Please enter a valid numerical value')
 
 
 	@classmethod
@@ -131,7 +140,7 @@ eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
 		nananananananana', 'Unit: ea, Source: QLD, Expiry date: 22/22/22, Price: $1'),
 			('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
 			('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10')]
-	f1 = [('Name', 'string'), ('Address', 'nstring'), ('Age', 'int'), ('Balance', 'money'), ('Weight', 'float'), ('thoughts?', 'yn')]
+	f1 = [('Name', 'string'), ('Address', 'nstring'), ('Age', 'int'), ('Balance', 'money'), ('Weight', 'number'), ('thoughts?', 'yn')]
 	f2 = [('thing', 'string') for _ in range(10)]
 	o1 = 'X to exit, C to continue, W to whatever'
 
