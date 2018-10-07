@@ -51,7 +51,11 @@ class StoreTest(unittest.TestCase):
             self.assertEqual(len(os), 2)
 
     def test7(self):
-        pass
+        self.s1.setProducts([self.p1])
+        self.s1.addProduct("Cheese", "kg", 10.00, "France", 50)
+        self.s1.addProduct("Cheese twisties", "kg", 20.00, "USA", 50)
+        self.assertEqual(len(self.s1.searchProductByName("cheese")), 2)
+        self.assertEqual(len(self.s1.searchProductByName(" APPLE ")), 1) #check lower-case and strip
 
 
 

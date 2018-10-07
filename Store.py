@@ -151,7 +151,7 @@ class Store:
         raise Exception("Order does not exist.")
 
     def searchProductByName(self, keyword):
-        keyword.lower()
+        keyword = keyword.lower().strip()
         matchingProducts = []
         for product in self.products:
             searchingProductName = product.getName().lower()
