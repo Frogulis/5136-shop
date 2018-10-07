@@ -5,7 +5,7 @@ from CustomerAccount import CustomerAccount
 class StoreController:
     def __init__(self):
         self.loginDetail = None  # store the Id of the user that currently logged in
-        self.store = Store.Store()
+        #self.store = Store.Store()
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
         self.store.addProduct(name, unit, originalPrice, source, shelfLife)
@@ -28,6 +28,7 @@ class StoreController:
                 currentCustomer.subtractBalance(totalPrice)
             except Exception:
                 # topUp
+                pass
             for eachProduct in shoppingCart:
                 eachProduct.deductStock(eachProduct[1],eachProduct[2])
             # generate order
@@ -75,7 +76,7 @@ class StoreController:
     def editBatchQuantity(self, productId, batchId):
         # TODO
         #display old quantity
-        newQuantity = pass #input
+        newQuantity = 'pass' #input
         #validate input
         self.store.getProduct(productId).getBatch(batchId).setQuantity(newQuantity)
         #display new quantity
@@ -98,14 +99,40 @@ class StoreController:
         # ask for confirm from user
         self.loginDetail = None
 
-    def searchProduct(self):
-        pass  # TODO
+    # ML
+    def searchProduct(self, userInput):
+        # products = Store.getProducts()
+        products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
+            , ['20003', 'Dutch carrots', 'ea'], ['20004', 'Watermelon', 'ea'], ['20005', 'Rock Melon', 'ea']]
+        pList = []
+        for i in range(len(products) - 1):
+            productName = products[i][1]
+            if productName.lower().__contains__(userInput.lower()):
+                pList.append(products[i])
 
+        if pList == []:
+            raise Exception("No products found.")
+        else:
+            return pList
+            #print(pList)
+
+    #ML
     def viewProduct(self, productId):
-        pass    #TODO
+        # products = Store.getProducts()
+        products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
+            , ['20003', 'Dutch carrots', 'ea'], ['20004', 'Watermelon', 'ea'], ['20005', 'Rock Melon', 'ea']]
+        i = 0
+        found = False
+        while found == False:
+            if products[i][0] != productId:
+                i += 1
+            else:
+                found = True
+        #print(products[i])
+        return products[i]
 
     def browseProducts(self):
-        return Store.products
+        return self.Store.products
 
     def register(self, name, pwd, phone, address, loggedIn=False):
         uid = Store.Store.generateNewCustomerId()
@@ -119,3 +146,9 @@ class StoreController:
         CustomerAccount.setBalance(0.00)
         CustomerAccount.setLoggedIn(True)
 
+
+if __name__ == '__main__':
+    s = StoreController()
+    #s.searchProduct('ot')
+    s.viewProduct('20003')
+    print(s)
