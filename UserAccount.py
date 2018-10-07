@@ -35,6 +35,3 @@ class UserAccount:
         else:
             self.setLoggedIn(False)
             raise Exception("Invalid password")
-
-    
-

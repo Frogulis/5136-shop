@@ -115,3 +115,11 @@ class Product:
     def updateDiscount(self):
         for batch in self.batches:
             batch.setActualPrice(batch.getDiscount() * self.originalPrice)
+
+    # return total quantity of that particular price
+    def calculateStock(self, price):
+        totalQuantity = 0.0
+        for batch in self.batches:
+            if batch.actualPrice == price:
+                totalQuantity += batch.quantity
+        return totalQuantity
