@@ -42,7 +42,17 @@ class StoreTest(unittest.TestCase):
         self.assertEqual(len(self.s1.getOrderHistoryAsList()), 0)
 
     def test6(self):
-        
+        self.s1.addOrder("C0001")
+        self.s1.addOrder("C0002")
+        self.s1.addOrder("C0001")
+        self.s1.addOrder("C0002")
+        self.assertEqual(len(self.s1.getOrderHistory()), 2)
+        for os in self.s1.getOrderHistory().values():
+            self.assertEqual(len(os), 2)
+
+    def test7(self):
+        pass
+
 
 
 if __name__ == '__main__':
