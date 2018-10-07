@@ -14,13 +14,13 @@ class Store:
         self.orderHistory = {}
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
-        id = self.generateNewProductId()
-        newProduct = Product(id, name, unit, originalPrice, source, shelfLife)
+        pid = self.generateNewProductId()
+        newProduct = Product(pid, name, unit, originalPrice, source, shelfLife)
         self.products.append(newProduct)
 
     def addCustomer(self, password, name, phoneNum, address):
-        id = self.generateNewCustomerId()
-        newCustomer = CustomerAccount(id, password, name, phoneNum, address)
+        cid = self.generateNewCustomerId()
+        newCustomer = CustomerAccount(cid, password, name, phoneNum, address)
         self.customers.append(newCustomer)
 
     def addOrder(self, customerId, sCart=None, tPrice=0.0, tDate=datetime.datetime.now()):
