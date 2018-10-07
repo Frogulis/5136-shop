@@ -71,7 +71,7 @@ class UserInterface:
     def displayItem(c, title, list_items, option_string, aux=None):
         return c.displayList(title, list_items, option_string, aux)
 
-<<<<<<< HEAD
+
     @classmethod
     def displayForm(c, title, fields, aux=None):
         c._printWhitespace(title)
@@ -93,7 +93,7 @@ class UserInterface:
         for i in range(no_spaces):
             print(' ', end='')
         print(s, end=line_end)
-=======
+
 	@classmethod
 	def displayForm(c, title, fields, aux=None):
 		
@@ -142,7 +142,6 @@ class UserInterface:
 	def displayError(c, string):
 		c._printWhitespace("Error: " + str(string))
 		return None
->>>>>>> 4dc5738a9c228ad1b610e884a73be2392ddb1015
 
 
 if __name__ == '__main__':
@@ -157,7 +156,7 @@ eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
            ('Marijuana', 'Unit: kg, Source: Himalayas, Expiry date: 22/22/22, Price: $5000')]
     li2 = [('Banalongboynananananananananananananananananananananananananana\
 		nananananananana', 'Unit: ea, Source: QLD, Expiry date: 22/22/22, Price: $1'),
-<<<<<<< HEAD
+
            ('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
            ('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10')]
     f1 = [('Name', 'string'), ('Address', 'string'), ('Age', 'int')]
@@ -177,9 +176,8 @@ eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
                                                         , 'Are you sure you\'d like to proceed?'))
     else:
         print("invalid choice")
-=======
-			('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
-			('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10')]
+	[('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50')
+        ,('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10')]
 	f1 = [('Name', 'string'), ('Address', 'nstring'), ('Age', 'int'), ('Balance', 'money'), ('Weight', 'number'), ('thoughts?', 'yn')]
 	f2 = [('thing', 'string') for _ in range(10)]
 	o1 = 'X to exit, C to continue, W to whatever'
@@ -197,4 +195,3 @@ eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
 			'Are you sure you\'d like to proceed?'))
 	else:
 		print("invalid choice")
->>>>>>> 4dc5738a9c228ad1b610e884a73be2392ddb1015
