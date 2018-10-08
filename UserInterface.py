@@ -65,6 +65,8 @@ class UserInterface:
         if aux is not None:
             c._printWhitespace(aux, 2)
         i = input('y/n or blank to cancel: ')
+        while i.lower().strip() not in ['y', 'n', '']:
+            i = input("Please enter 'y', 'n' or nothing")
         return i
 
     @classmethod
