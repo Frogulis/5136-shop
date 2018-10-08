@@ -39,9 +39,11 @@ class Store:
         for customerData in savedStore['customers']:
             cId = customerData['id']
             cPassword = customerData['password']
-            cName = customerData['phoneNumber']
+            cName = customerData['name']
+            cPhoneNumber= customerData['phoneNumber']
             cAddress = customerData['address']
             cBalance = customerData['balance']
+            customer = CustomerAccount(cId, cPassword, cName, cPhoneNumber, cAddress, cBalance)
             ########TODO
             productsInCart = customerData['shoppingCart']
             for productInCart in productsInCart:
@@ -122,6 +124,7 @@ class Store:
         nid = self.generateNewOrderId(customerId)
         newOrder = Order(nid, customerId, sCart, tPrice, tDate)
         self.orderHistory[customerId].append(newOrder)
+        return newOrder
 
     def generateNewCustomerId(self):
         if len(self.customers) == 0:
