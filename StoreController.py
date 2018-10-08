@@ -99,6 +99,7 @@ class StoreController:
         # ask for confirm from user
         self.loginDetail = None
 
+<<<<<<< Updated upstream
     # ML
     def searchProduct(self, userInput):
         # products = Store.getProducts()
@@ -115,6 +116,14 @@ class StoreController:
         else:
             return pList
             #print(pList)
+=======
+    def searchProduct(self):
+        ## ask for input
+        keyword = pass
+        matching = self.store.searchProductByName(keyword)
+        ## display matching
+        pass  # TODO
+>>>>>>> Stashed changes
 
     #ML
     def viewProduct(self, productId):
@@ -134,17 +143,25 @@ class StoreController:
     def browseProducts(self):
         return self.Store.products
 
-    def register(self, name, pwd, phone, address, loggedIn=False):
-        uid = Store.Store.generateNewCustomerId()
-        UserAccount.setId(uid)
-        UserAccount.setName(name)
-        UserAccount.setPassword(pwd)
-        UserAccount.setLoggedIn(True)
-        CustomerAccount.setPhoneNumber(phone)
-        CustomerAccount.setAddress(address)
-        CustomerAccount.setShoppingCart(None)
-        CustomerAccount.setBalance(0.00)
-        CustomerAccount.setLoggedIn(True)
+    # def addCustomer(self, password, name, phoneNum, address):
+    def register(self):
+        # requires a lot of inputs
+        password = pass
+        name = pass
+        phoneNum = pass
+        address = pass
+        self.store.addCustomer(password, name, phoneNum, address)
+
+    def removeCustomer(self, customerId):
+        # display customer details
+        # prompt confirmation
+        self.store.removeCustomer(customerId)
+
+    def removeProduct(self, productId):
+        self.store.removeProduct(productId)
+
+
+
 
 
 if __name__ == '__main__':
