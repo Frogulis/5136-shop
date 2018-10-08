@@ -5,21 +5,20 @@ class ShoppingCart:
     def __init__(self):
         self.productsInCart = []
 
-    #def addToShoppingCart(self, itemToBeAdded):
-    #    self.productsInCart.append(itemToBeAdded)
+    def addTupleToShoppingCart(self, itemToBeAdded):
+        self.productsInCart.append(itemToBeAdded)
 
-    def addToShoppingCart(self, productId, actualPrice = 0.00, quantity = 0.00):
+    def addToShoppingCart(self, productId, actualPrice, quantity):
         #self._convertToFloat(actualPrice)
         #self._convertToFloat(quantity)
         newTuple = [productId, round(actualPrice,2), quantity]
         self.productsInCart.append(newTuple)
 
-    # def adjustQuantity(self, productId, actualPrice = 0.00, newQuantity = 0.00):
-    def adjustQuantity(self, productId, newQuantity):
-        # actualPrice = self._convertToFloat(actualPrice)
+    def adjustQuantity(self, productId, actualPrice, newQuantity):
+        actualPrice = self._convertToFloat(actualPrice)
         found = False
         for item in self.productsInCart:
-            if item[0] == productId:      # and item[1] == actualPrice:
+            if item[0] == productId and item[1] == actualPrice:
                 item[2] = newQuantity
                 found = True
         if not found:
@@ -39,11 +38,11 @@ class ShoppingCart:
 
     # def deleteFromShoppingCart(self, productId, actualPrice = 0.00):
     #    actualPrice = self._convertToFloat(actualPrice)
-    def deleteFromShoppingCart(self, productId):
+    def deleteFromShoppingCart(self, productId, actualPrice):
         found = False
         for i in range(len(self.productsInCart) - 1):
             item = self.productsInCart[i]
-            if item[0] == productId:    # and item[1] == actualPrice:
+            if item[0] == productId and item[1] == actualPrice:
                 del self.productsInCart[i]
                 found = True
         if not found:
