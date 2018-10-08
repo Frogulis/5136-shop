@@ -5,7 +5,7 @@ from CustomerAccount import CustomerAccount
 class StoreController:
     def __init__(self):
         self.loginDetail = None  # store the Id of the user that currently logged in
-        self.store = Store.Store()
+        self.store = Store()
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
         self.store.addProduct(name, unit, originalPrice, source, shelfLife)
