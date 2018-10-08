@@ -11,13 +11,12 @@ class ShoppingCart:
     def addToShoppingCart(self, productId, actualPrice = 0.00, quantity = 0.00):
         #self._convertToFloat(actualPrice)
         #self._convertToFloat(quantity)
-        newTuple = [productId,round(actualPrice,2),round(quantity,2)]
+        newTuple = [productId, round(actualPrice,2), quantity]
         self.productsInCart.append(newTuple)
 
     # def adjustQuantity(self, productId, actualPrice = 0.00, newQuantity = 0.00):
     def adjustQuantity(self, productId, newQuantity):
         # actualPrice = self._convertToFloat(actualPrice)
-        newQuantity = self._convertToFloat(newQuantity)
         found = False
         for item in self.productsInCart:
             if item[0] == productId:      # and item[1] == actualPrice:

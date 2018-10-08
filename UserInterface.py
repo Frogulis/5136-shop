@@ -159,7 +159,7 @@ eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
 
            ('Apple', 'Unit: ea, Source: SA, Expiry date: 22/22/22, Price: $1.50'),
            ('Potato', 'Unit: kg, Source: VIC, Expiry date: 22/22/22, Price: $10')]
-    f1 = [('Name', 'string'), ('Address', 'string'), ('Age', 'int')]
+    f1 = [('Name', 'string'), ('Address', 'nstring'), ('Age', 'int')]
     f2 = [('thing', 'string') for _ in range(10)]
     o1 = 'X to exit, C to continue, W to whatever'
 
