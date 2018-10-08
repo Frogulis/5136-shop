@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from Store import Store
 from UserAccount import UserAccount
 from CustomerAccount import CustomerAccount
@@ -49,22 +51,27 @@ class StoreController:
 
     def displayStartMenu(self):
         while True:
-            menuItems = []
-            menuItems.append(('Browse Products', 'Enter B to browse the list of products'))
-            menuItems.append(('Search Products', 'Enter S to search products by keyword'))
+            menuItems = OrderedDict() #stays in input order
+            menuItems['B'] = ('Browse Products', 'Enter B to browse the list of products')
+            menuItems['S'] = ('Search Products', 'Enter S to search products by keyword')
             if not self.loginDetail: #nobody logged in
-                menuItems.append(('Register', 'Enter R to register an account'))
-                menuItems.append(('Login', 'Enter L to login to your account'))
+                menuItems['R'] = ('Register', 'Enter R to register an account')
+                menuItems['L'] = ('Login', 'Enter L to login to your account')
             else:
-                menuItems.append(('View Order History', 'Enter O to view order history'))
-                menuItems.append(('Manage Account', 'Enter M to manage your account'))
+                menuItems['O'] = ('View Order History', 'Enter O to view order history')
+                menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
                 if self.loginDetail == 'owner':
-                    menuItems.append(('Add Product', 'Enter A to add a product'))
-                    menuItems.append(('Remove Customer', 'Enter C to remove a customer'))
-            menuItems.append("Exit", 'Enter X to exit')
+                    menuItems['A'] = ('Add Product', 'Enter A to add a product')
+                    menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
+            menuItems['X'] = ("Exit", 'Enter X to exit')
             request = UserInterface.displayList("Monash Fruit and Vegetable Store",
-                                                menuItems, "Please enter one of the above options to continue")
-            UserInterface.writeLine("You said " + request)
+                                                list(menuItems.values()),
+                                                "Please enter one of the above options to continue").upper().strip()
+            if request in menuItems.values():
+                UserInterface.writeLine("You said " + request)
+            else:
+                UserInterface.writeLine("Invalid option: " + request)
+
 
 
     def editProduct(self,productId):
@@ -94,17 +101,17 @@ class StoreController:
         # TODO
         #display old quantity
         results = UserInterface.displayForm("Please enter the new quantity", [('Quantity', 'number')]) #input
-        newQuantity = int(results[0])
+        newQuantity = float(results[0])
         #validate input
         self.store.getProduct(productId).getBatch(batchId).setQuantity(newQuantity)
         #display new quantity
 
     # can only REDUCE quantity by price, adding will cause trouble
     def reduceProductQuantityByPrice(self, productId, actualPrice):
-        # TODO
-        # display old quantity
-        # ask for new quantity input
-        newQuantity = pass
+        UserInterface.writeLine("Current quantity at $" + str(actualPrice) + " is "
+            + str(self.store.getProduct(productId).calculateStock(actualPrice)))
+        results = UserInterface.displayForm("Please enter the new quantity", [('Quantity', 'number')]) #input
+        newQuantity = float(results[0])
         self.store.getProduct(productId).deductStock(actualPrice,newQuantity)
         #display new quantity
 
