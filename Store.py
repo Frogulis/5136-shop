@@ -30,8 +30,6 @@ class Store:
             for batch in batches:
                 sDate = batch['shelfDate'].split('-')
                 bShelfDate = datetime.date(sDate[0], sDate[1], sDate[2])
-                #eDate = batch['expiryDate'].split('-')
-                #bExpiryDate = datetime.date(eDate[0], eDate[1], eDate[2])
                 batchId = batch['batchId']
                 batchActualPrice = batch['actualPrice']
                 batchQuantity = batch['quantity']
