@@ -48,9 +48,24 @@ class StoreController:
         pass  # TODO
 
     def displayStartMenu(self):
-        # ask for user input
-        # return
-        pass  # TODO
+        while True:
+            menuItems = []
+            menuItems.append(('Browse Products', 'Enter B to browse the list of products'))
+            menuItems.append(('Search Products', 'Enter S to search products by keyword'))
+            if not self.loginDetail: #nobody logged in
+                menuItems.append(('Register', 'Enter R to register an account'))
+                menuItems.append(('Login', 'Enter L to login to your account'))
+            else:
+                menuItems.append(('View Order History', 'Enter O to view order history'))
+                menuItems.append(('Manage Account', 'Enter M to manage your account'))
+                if self.loginDetail == 'owner':
+                    menuItems.append(('Add Product', 'Enter A to add a product'))
+                    menuItems.append(('Remove Customer', 'Enter C to remove a customer'))
+            menuItems.append("Exit", 'Enter X to exit')
+            request = UserInterface.displayList("Monash Fruit and Vegetable Store",
+                                                menuItems, "Please enter one of the above options to continue")
+            UserInterface.writeLine("You said " + request)
+
 
     def editProduct(self,productId):
         # get user input
