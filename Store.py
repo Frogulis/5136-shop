@@ -35,11 +35,17 @@ class Store:
                 batchQuantity = batch['quantity']
                 batchShelfDate = bShelfDate
                 product.buildBatch(batchId, batchActualPrice, batchQuantity, batchShelfDate)
-
-                pass  ################
-
+            self.products.append(product)
         for customerData in savedStore['customers']:
-            pass
+            cId = customerData['id']
+            cPassword = customerData['password']
+            cName = customerData['phoneNumber']
+            cAddress = customerData['address']
+            cBalance = customerData['balance']
+            ########TODO
+            productsInCart = customerData['shoppingCart']
+            for productInCart in productsInCart:
+
         for customerId in savedStore['orderHistory']:
             pass
         ownerData = savedStore['owner']

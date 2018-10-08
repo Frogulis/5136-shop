@@ -2,8 +2,9 @@ import UserAccount
 from ShoppingCart import ShoppingCart
 
 
+#yuki: change the order of the parameters between balance and shoppingCart
 class CustomerAccount(UserAccount.UserAccount):
-    def __init__(self, cid, password, name, phoneNumber, address, shoppingCart=None, balance=0):
+    def __init__(self, cid, password, name, phoneNumber, address, balance=0, shoppingCart=None):
         super(CustomerAccount, self).__init__(cid, name, password)
         self.phoneNumber = phoneNumber
         self.address = address
