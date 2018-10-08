@@ -102,31 +102,13 @@ class StoreController:
         # ask for confirm from user
         self.loginDetail = None
 
-<<<<<<< Updated upstream
-    # ML
-    def searchProduct(self, userInput):
-        # products = Store.getProducts()
-        products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
-            , ['20003', 'Dutch carrots', 'ea'], ['20004', 'Watermelon', 'ea'], ['20005', 'Rock Melon', 'ea']]
-        pList = []
-        for i in range(len(products) - 1):
-            productName = products[i][1]
-            if productName.lower().__contains__(userInput.lower()):
-                pList.append(products[i])
 
-        if pList == []:
-            raise Exception("No products found.")
-        else:
-            return pList
-            #print(pList)
-=======
     def searchProduct(self):
         ## ask for input
         keyword = pass
         matching = self.store.searchProductByName(keyword)
         ## display matching
         pass  # TODO
->>>>>>> Stashed changes
 
     #ML
     def viewProduct(self, productId):
