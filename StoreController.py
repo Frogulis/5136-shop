@@ -1,11 +1,13 @@
 from Store import Store
 from UserAccount import UserAccount
 from CustomerAccount import CustomerAccount
+from UserInterface import UserInterface
 
 class StoreController:
     def __init__(self):
         self.loginDetail = None  # store the Id of the user that currently logged in
-        #self.store = Store.Store()
+        self.store = Store()
+
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
         self.store.addProduct(name, unit, originalPrice, source, shelfLife)
@@ -76,7 +78,8 @@ class StoreController:
     def editBatchQuantity(self, productId, batchId):
         # TODO
         #display old quantity
-        newQuantity = 'pass' #input
+        results = UserInterface.displayForm("Please enter the new quantity", [('Quantity', 'number')]) #input
+        newQuantity = int(results[0])
         #validate input
         self.store.getProduct(productId).getBatch(batchId).setQuantity(newQuantity)
         #display new quantity
@@ -99,22 +102,13 @@ class StoreController:
         # ask for confirm from user
         self.loginDetail = None
 
-    # ML
-    def searchProduct(self, userInput):
-        # products = Store.getProducts()
-        products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
-            , ['20003', 'Dutch carrots', 'ea'], ['20004', 'Watermelon', 'ea'], ['20005', 'Rock Melon', 'ea']]
-        pList = []
-        for i in range(len(products) - 1):
-            productName = products[i][1]
-            if productName.lower().__contains__(userInput.lower()):
-                pList.append(products[i])
 
-        if pList == []:
-            raise Exception("No products found.")
-        else:
-            return pList
-            #print(pList)
+    def searchProduct(self):
+        ## ask for input
+        keyword = pass
+        matching = self.store.searchProductByName(keyword)
+        ## display matching
+        pass  # TODO
 
     #ML
     def viewProduct(self, productId):
@@ -134,17 +128,25 @@ class StoreController:
     def browseProducts(self):
         return self.Store.products
 
-    def register(self, name, pwd, phone, address, loggedIn=False):
-        uid = Store.Store.generateNewCustomerId()
-        UserAccount.setId(uid)
-        UserAccount.setName(name)
-        UserAccount.setPassword(pwd)
-        UserAccount.setLoggedIn(True)
-        CustomerAccount.setPhoneNumber(phone)
-        CustomerAccount.setAddress(address)
-        CustomerAccount.setShoppingCart(None)
-        CustomerAccount.setBalance(0.00)
-        CustomerAccount.setLoggedIn(True)
+    # def addCustomer(self, password, name, phoneNum, address):
+    def register(self):
+        # requires a lot of inputs
+        password = pass
+        name = pass
+        phoneNum = pass
+        address = pass
+        self.store.addCustomer(password, name, phoneNum, address)
+
+    def removeCustomer(self, customerId):
+        # display customer details
+        # prompt confirmation
+        self.store.removeCustomer(customerId)
+
+    def removeProduct(self, productId):
+        self.store.removeProduct(productId)
+
+
+
 
 
 if __name__ == '__main__':

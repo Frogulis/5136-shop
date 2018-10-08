@@ -1,8 +1,10 @@
 from Order import Order
 from Product import Product
 from CustomerAccount import CustomerAccount
+from OwnerAccount import OwnerAccount
 
 import datetime
+import json
 
 
 class Store:
@@ -10,8 +12,99 @@ class Store:
         # readfile()
         self.products = []
         self.customers = []
-        self.owner = []
+        self.owner = OwnerAccount('owner', 'owner', 'owner')
         self.orderHistory = {}
+
+    def readStore(self):  # yuki
+        with open('testbyyuki.json','r') as infile:
+            savedStore = json.loads(infile.read())
+        for productData in savedStore['products']:
+            productId = productData['id']
+            productName = productData['name']
+            productUnit = productData['unit']
+            productOriginalPrice = productData['originalPrice']
+            productSource = productData['source']
+            productShelfLife = productData['shelfLife']
+            batches = productData['batch']
+            product = Product(productId, productName, productUnit, productOriginalPrice, productSource, productShelfLife)
+            for batch in batches:
+                sDate = batch['shelfDate'].split('-')
+                bShelfDate = datetime.date(sDate[0], sDate[1], sDate[2])
+                batchId = batch['batchId']
+                batchActualPrice = batch['actualPrice']
+                batchQuantity = batch['quantity']
+                batchShelfDate = bShelfDate
+                product.buildBatch(batchId, batchActualPrice, batchQuantity, batchShelfDate)
+            self.products.append(product)
+        for customerData in savedStore['customers']:
+            cId = customerData['id']
+            cPassword = customerData['password']
+            cName = customerData['phoneNumber']
+            cAddress = customerData['address']
+            cBalance = customerData['balance']
+            ########TODO
+            productsInCart = customerData['shoppingCart']
+            for productInCart in productsInCart:
+
+        for customerId in savedStore['orderHistory']:
+            pass
+        ownerData = savedStore['owner']
+        self.owner = OwnerAccount(ownerData['id'], ownerData['name'], ownerData['password'])
+
+    def writeStore(self):  # yuki
+        currStore = {'products': [],
+                     'customers': [],
+                     'owner': [],
+                     'orderHistory': {}}
+        for product in self.products:  # write product
+            productData = {'id': product.getId(),
+                           'name': product.getName(),
+                           'unit': product.getUnit(),
+                           'originalPrice': product.getOriginalPrice(),
+                           'source': product.getSource(),
+                           'shelfLife': product.getShelfLife(),
+                           }
+            batchList = []
+            for batch in product.getBatches():
+                batchData = {'batchId': batch.getBatchID(),
+                             'shelfDate': batch.getShelfDate().strftime("%Y-%m-%d"),
+                             'expiryDate': batch.getExpiryDate().strftime("%Y-%m-%d"),
+                             'actualPrice': batch.getActualPrice(),
+                             'quantity': batch.getQuantity()}
+                batchList.append(batchData)
+            productData['batch'] = batchList
+            currStore['products'].append(productData)
+        for customer in self.customers:  # write customer
+            customerData = {'id': customer.getId(),
+                            'password': customer.getPassword(),
+                            'name': customer.getName(),
+                            'phoneNumber': customer.getPhoneNumber(),
+                            'address': customer.getAddress(),
+                            'shoppingCart': customer.getShoppingCart().productsInCart,  ###
+                            'balance': customer.getBalance()}
+            currStore['customers'].append(customerData)
+
+        currStore['owner'] = {'id': self.owner.getId(),
+                              'password': self.owner.getPassword(),
+                              'name': self.owner.getName()}
+        for customerId in self.orderHistory:
+            orderList = self.orderHistory[customerId]
+            ordersOfCustomer = []
+            for order in orderList:
+                orderData = {'orderId': order.getOrderId(),
+                             'customerId': order.getCustomerId(),
+                             'shoppingCart': order.getShoppingCart().productsInCart,
+                             'totalPrice': order.getTotalPrice(),
+                             'transactionDate': order.getTransactionDate()}
+                ordersOfCustomer.append(orderData)
+            currStore['orderHistory'][customerId] = ordersOfCustomer
+        ## write currstore into json
+        with open('testbyyuki.json','w') as outfile:
+            json.dump(currStore, outfile)
+
+
+
+
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
         pid = self.generateNewProductId()
@@ -177,17 +270,34 @@ class Store:
 
 
 if __name__ == '__main__':
+    """
+    """
+    s = Store()
+    s.addCustomer('cs1','cs1','0450563312','add1')
+    s.addCustomer('cs2','cs3','0450563312','add1')
+    s.addCustomer('cs3','cs3','0450563312','add1')
+    s.addProduct('apple','kg',5, 'China', 10)
+    s.addProduct('banana', 'kg', 3, 'China', 5)
+    s.getProduct('1').addBatch(20)
+    s.getProduct('2').addBatch(30)
+    print(s.getProduct('2').getBatch('1').getExpiryDate().strftime("%Y-%m-%d"))
+    s.getCustomer('1').getShoppingCart().addToShoppingCart('1', 1.50, 4)
+    s.getCustomer('1').getShoppingCart().addToShoppingCart('3', 3.89, 10)
+    s.writeStore()
+
     # put parameters to create Store object
+    """
     products = ["Apple", "Banana", "Orange"]
     customers = ["C1000", "C1001", "C1002", "C1003"]
     owner = "O1500"
     orderHistory = [{"C1000": "Order1"}, {"C1002": "Order2"}]
-
+    """
     # create object
     # c = Store(products, customers, owner, orderHistory)
-
+    """
     s=Store()
     s.addProduct('apple', 'bag', 2.5, 'china', 9)
     print(1, s.getProducts()[0].getId())
     s.editProductName('1', 'banana')
     s.editProductOriginalPrice('1','er')
+    """

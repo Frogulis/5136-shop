@@ -1,4 +1,4 @@
-import Batch
+from Batch import Batch
 import datetime
 
 class Product:
@@ -16,6 +16,12 @@ class Product:
             self.batches = batches
         self.batchIdCounter = batchIdCounter
 
+    # for reading files to build batches
+    def buildBatch(self, id, actualPrice, quantity, shelfDate, shelfLife):
+        newBatch = Batch(id, actualPrice, quantity, shelfDate, shelfLife)
+        self.batches.append(newBatch)
+
+    # programming running, owner wants to addBatch
     def addBatch(self, quantity):
         batch = Batch.Batch(self.generateBatchId(), self.originalPrice, quantity, datetime.date.today(), self.shelfLife)
         self.batches.append(batch)
