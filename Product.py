@@ -23,7 +23,7 @@ class Product:
 
     # programming running, owner wants to addBatch
     def addBatch(self, quantity):
-        batch = Batch.Batch(self.generateBatchId(), self.originalPrice, quantity, datetime.date.today(), self.shelfLife)
+        batch = Batch(self.generateBatchId(), self.originalPrice, quantity, datetime.date.today(), self.shelfLife)
         self.batches.append(batch)
 
     # Please check if there is enough stock before using this method,

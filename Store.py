@@ -2,6 +2,7 @@ from Order import Order
 from Product import Product
 from CustomerAccount import CustomerAccount
 from OwnerAccount import OwnerAccount
+from ShoppingCart import ShoppingCart
 
 import datetime
 import json
@@ -14,6 +15,7 @@ class Store:
         self.customers = []
         self.owner = OwnerAccount('owner', 'owner', 'owner')
         self.orderHistory = {}
+        self.readStore()
 
     def readStore(self):  # yuki
         with open('testbyyuki.json','r') as infile:
@@ -29,25 +31,41 @@ class Store:
             product = Product(productId, productName, productUnit, productOriginalPrice, productSource, productShelfLife)
             for batch in batches:
                 sDate = batch['shelfDate'].split('-')
-                bShelfDate = datetime.date(sDate[0], sDate[1], sDate[2])
+                bShelfDate = datetime.date(int(sDate[0]), int(sDate[1]), int(sDate[2]))
                 batchId = batch['batchId']
                 batchActualPrice = batch['actualPrice']
                 batchQuantity = batch['quantity']
                 batchShelfDate = bShelfDate
-                product.buildBatch(batchId, batchActualPrice, batchQuantity, batchShelfDate)
+                product.buildBatch(batchId, batchActualPrice, batchQuantity, batchShelfDate, productShelfLife)
             self.products.append(product)
         for customerData in savedStore['customers']:
             cId = customerData['id']
             cPassword = customerData['password']
-            cName = customerData['phoneNumber']
+            cName = customerData['name']
+            cPhoneNumber= customerData['phoneNumber']
             cAddress = customerData['address']
             cBalance = customerData['balance']
-            ########TODO
-            productsInCart = customerData['shoppingCart']
-            for productInCart in productsInCart:
+            cShoppingCart = customerData['shoppingCart']
+            customer = CustomerAccount(cId, cPassword, cName, cPhoneNumber, cAddress, cBalance)
+            customer.shoppingCart.setProductsInCart(cShoppingCart)
+            self.customers.append(customer)
 
         for customerId in savedStore['orderHistory']:
-            pass
+            cOrderList = savedStore['orderHistory'][customerId]
+            customerOrders = []
+            for eachOrder in cOrderList:
+                orderId = eachOrder['orderId']
+                orderCId = eachOrder['customerId']
+                tempShoppingCart = eachOrder['shoppingCart']############
+                orderShoppingCart = ShoppingCart()
+                orderShoppingCart.setProductsInCart(tempShoppingCart)
+                orderTotalPrice = eachOrder['totalPrice']
+                dateS = eachOrder['transactionDate'].split('-')
+                orderTransactionDate = datetime.datetime(int(dateS[0]), int(dateS[1]), int(dateS[2]), int(dateS[3]), int(dateS[4]), int(dateS[5]))
+                order = Order(orderId, orderCId, orderShoppingCart, orderTotalPrice, orderTransactionDate)
+                customerOrders.append(order)
+            self.orderHistory[customerId] = customerOrders
+
         ownerData = savedStore['owner']
         self.owner = OwnerAccount(ownerData['id'], ownerData['name'], ownerData['password'])
 
@@ -95,16 +113,12 @@ class Store:
                              'customerId': order.getCustomerId(),
                              'shoppingCart': order.getShoppingCart().productsInCart,
                              'totalPrice': order.getTotalPrice(),
-                             'transactionDate': order.getTransactionDate()}
+                             'transactionDate': order.getTransactionDate().strftime("%Y-%m-%d-%H-%M-%S")}
                 ordersOfCustomer.append(orderData)
             currStore['orderHistory'][customerId] = ordersOfCustomer
         ## write currstore into json
         with open('testbyyuki.json','w') as outfile:
             json.dump(currStore, outfile)
-
-
-
-
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
         pid = self.generateNewProductId()
@@ -270,21 +284,58 @@ class Store:
 
 
 if __name__ == '__main__':
-    """
+    # there are some issue with the batchIdCounter. for every batch i build, the Id was always '1'
+    s = Store()
+    #s.getProduct('1').addBatch(10)
+
+    for p in s.products:
+        print('pid', p.getId())
+        for batch in p.getBatches():
+            print('b', batch.getActualPrice())
+    for c in s.customers:
+        print('id', c.getId())
+        print('ShoppingCart', c.getShoppingCart().productsInCart)
+
+    for cid in s.orderHistory:
+        for order in s.orderHistory[cid]:
+            print(order.getTotalPrice())
+            print(order.getTransactionDate())
+    s.writeStore()
+
+
     """
     s = Store()
     s.addCustomer('cs1','cs1','0450563312','add1')
-    s.addCustomer('cs2','cs3','0450563312','add1')
+    s.addCustomer('cs2','cs2','0450563312','add1')
     s.addCustomer('cs3','cs3','0450563312','add1')
     s.addProduct('apple','kg',5, 'China', 10)
     s.addProduct('banana', 'kg', 3, 'China', 5)
     s.getProduct('1').addBatch(20)
     s.getProduct('2').addBatch(30)
-    print(s.getProduct('2').getBatch('1').getExpiryDate().strftime("%Y-%m-%d"))
+    #print(s.getProduct('2').getBatch('1').getExpiryDate().strftime("%Y-%m-%d"))
+    #put product into shopping cart
     s.getCustomer('1').getShoppingCart().addToShoppingCart('1', 1.50, 4)
     s.getCustomer('1').getShoppingCart().addToShoppingCart('3', 3.89, 10)
-    s.writeStore()
+    #print(s.getCustomer('1').getShoppingCart().productsInCart[:])
+    c1sc = ShoppingCart()
+    c1sc.setProductsInCart(s.getCustomer('1').getShoppingCart().productsInCart[:])
+    #print(type(c1sc), c1sc.getTotalPrice())
+    s.getCustomer('2').getShoppingCart().addToShoppingCart('2', 3.9, 13)
+    s.getCustomer('2').getShoppingCart().addToShoppingCart('4', 3.89, 1)
+    c2sc = ShoppingCart()
+    c2sc.setProductsInCart(s.getCustomer('2').getShoppingCart().productsInCart[:])
+    #c2sc = s.getCustomer('2').getShoppingCart()
+    #addOrder
+    s.addOrder('1', c1sc, c1sc.getTotalPrice())
+    s.addOrder('2', c2sc, c2sc.getTotalPrice())
+    s.getCustomer('2').getShoppingCart().addToShoppingCart('3', 3.89, 10)
+    c2sc = ShoppingCart()
+    c2sc.setProductsInCart(s.getCustomer('2').getShoppingCart().productsInCart[:])
+    #c2sc = s.getCustomer('2').getShoppingCart()
+    s.addOrder('2', c2sc, c2sc.getTotalPrice())
 
+    s.writeStore()
+"""
     # put parameters to create Store object
     """
     products = ["Apple", "Banana", "Orange"]
