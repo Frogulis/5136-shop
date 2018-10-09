@@ -48,6 +48,7 @@ class UserInterface:
 
     @classmethod
     def displayList(c, title, list_items, option_string, aux=None):
+        c._printWhitespace('---')
         c._printWhitespace(title)
         for item in list_items:
             c._printWhitespace(item[0], 2)
@@ -57,9 +58,11 @@ class UserInterface:
         c._printWhitespace(option_string)
         i = input('Please input option: ')
         return i
+        
 
     @classmethod
     def displayConfirm(c, title, msg, aux=None):
+        c._printWhitespace('---')
         c._printWhitespace(title)
         c._printWhitespace(msg, 2)
         if aux is not None:
@@ -76,6 +79,7 @@ class UserInterface:
 
     @classmethod
     def displayForm(c, title, fields, aux=None):
+        c._printWhitespace('---')
         c._printWhitespace(title)
         inputs = []
         for item in fields:
@@ -95,19 +99,6 @@ class UserInterface:
         for i in range(no_spaces):
             print(' ', end='')
         print(s, end=line_end)
-
-    @classmethod
-    def displayForm(c, title, fields, aux=None):
-        
-
-        c._printWhitespace(title)
-        inputs = []
-        for item in fields:
-            c._printWhitespace(item[0], 2)
-            inputs.append(c.tryInput(item))
-        if aux is not None:
-            c._printWhitespace(aux, 2)
-        return inputs
 
     @classmethod
     def tryInput(c, field):
@@ -138,12 +129,6 @@ class UserInterface:
                 
             except ValueError:
                 c.displayError('Please enter a valid numerical value')
-
-
-    @classmethod
-    def displayError(c, string):
-        c._printWhitespace("Error: " + str(string))
-        return None
 
 
 if __name__ == '__main__':

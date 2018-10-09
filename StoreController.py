@@ -53,6 +53,7 @@ class StoreController:
             UserInterface.displayList("The new order details: ", listOfTuples, "OptionString whatever")
             UserInterface.writeLine("The total price is: " + str(newShoppingCart.getTotalPrice()))
         else:
+            pass
             # do nothing
 
     def checkStock(self, desiredQuantity, productId, actualPrice):
@@ -83,7 +84,7 @@ class StoreController:
             request = UserInterface.displayList("Monash Fruit and Vegetable Store",
                                                 list(menuItems.values()),
                                                 "Please enter one of the above options to continue").upper().strip()
-            if request in menuItems.values():
+            if request in menuItems.keys():
                 UserInterface.writeLine("You said " + request)
             else:
                 UserInterface.writeLine("Invalid option: " + request)
@@ -119,7 +120,7 @@ class StoreController:
         results = UserInterface.displayForm("Please enter the new quantity", [('Quantity', 'number')]) #input
 
         newQuantity = float(results[0])
-        #confirmMsg = UserInterface.displayConfirm("Your new quantity is " + results[0], "Are you sure?")
+        confirmMsg = UserInterface.displayConfirm("Your new quantity is " + results[0], "Are you sure?")
         if confirmMsg == 'y' or confirmMsg == 'Y':
             self.store.getProduct(productId).getBatch(batchId).setQuantity(newQuantity)
             UserInterface.writeLine("The new quantity is: " + str(newQuantity))
@@ -192,6 +193,9 @@ class StoreController:
 
 if __name__ == '__main__':
     s = StoreController()
+    s.loginDetail = 'owner'
+    s.displayStartMenu()
+    exit()
     #s.searchProduct('ot')
     s.store.addCustomer('cs1','cs1','0450563312','add1')
     s.store.addCustomer('cs2','cs3','0450563312','add1')
