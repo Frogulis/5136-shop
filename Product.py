@@ -3,7 +3,7 @@ import datetime
 
 class Product:
     def __init__(self, pid="", name="", unit="ea",
-            originalPrice=0.00, source="", shelfLife=0, batches=None, batchIdCounter=0):
+            originalPrice=0.00, source="", shelfLife=0, batches=None):
         self.id = pid
         self.name = name
         self.unit = unit
@@ -14,7 +14,6 @@ class Product:
             self.batches = []
         else:
             self.batches = batches
-        self.batchIdCounter = batchIdCounter
 
     # for reading files to build batches
     def buildBatch(self, id, actualPrice, quantity, shelfDate, shelfLife):
@@ -67,8 +66,10 @@ class Product:
         self.shelfLife = life
 
     def generateBatchId(self):
-        newBatchId = str(self.batchIdCounter + 1)
-        self.batchIdCounter += 1
+        if len(self.batches) == 0:
+            newBatchId = 1
+        else:
+            newBatchId = str(int(self.batches[-1].getBatchId())+1)
         return newBatchId
 
     def getId(self):
