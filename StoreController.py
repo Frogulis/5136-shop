@@ -76,7 +76,8 @@ class StoreController:
                 if int(decision) < len(self.store.getCustomers()) and int(decision) > 0:
                     orders = self.store.getCustomerOrders(decision)
                 else:
-                    orders = [("Invalid customer ID")]
+                    UserInterface.writeLine("Invalid customer ID")
+                    orders = []
         else:
             orders = self.store.getCustomerOrders(uid)
 
@@ -108,6 +109,9 @@ class StoreController:
             else:
                 if request == 'O':
                     self.displayOrderHistory(self.loginDetail)
+                elif request == 'X':
+                    self.store.writeStore()
+                    exit()
                 else:
                     UserInterface.writeLine("Sorry, that input is not available right now")
 
