@@ -20,7 +20,6 @@ class StoreController:
         self.store.writeStore()
         UserInterface.writeLine("Product added.")
 
-    # the controller have the customerId stored already, so we do not need the parameter
     def checkOut(self):
         currentCustomer = self.store.getCustomer(self.loginDetail)
         shoppingCart = currentCustomer.getShoppingCart()
@@ -197,8 +196,9 @@ class StoreController:
         self.loginDetail = newCustomer.getId()
 
     def searchProduct(self):
-        keyword = UserInterface.displayForm("Search Product: Please input the product you would like to search: ", ('name', 'string'))
-        matchingList = self.store.searchProductByName(keyword)
+        keyword = UserInterface.displayForm("Search Product: Please input the product you would like to search: ", [('name', 'string')])
+        # here keyword is a list, so the "real" keyword  is keyword[0]
+        matchingList = self.store.searchProductByName(keyword[0])
         toBeDisplayed =[]
         displayNumber = 0
         for matchingProduct in matchingList:
@@ -226,16 +226,16 @@ class StoreController:
                     choice = input("Please enter a valid input.")
                 else:
                     validInput = True
-                    self.viewProduct(matchingList[matchIndex].getId())
+                    self.viewProductByPrice(matchingList[matchIndex].getId())
 
-
-
-
-    def viewProductByPrice(self,productId):
+    def viewProductByPrice(self, productId):
         product = self.store.getProduct(productId)
-        tuple0 = product.getName()
-        tuple1 = product.getSource() + product.getUnit() + product.originalPrice()
-        UserInterface.displayList("Product details: ", [tuple0, tuple1], "", False)
+        tuples = [('name',product.getName())]
+        tuples.append(('source', product.getSource()))
+        tuples.append(('unit', product.getUnit()))
+        tuples.append(('Original Price', product.getOriginalPrice()))
+
+        UserInterface.displayList("Product details: ", tuples, "", False)
         priceGroup = product.getPriceGroups()
         if priceGroup == {}:
             UserInterface.writeLine("There is no stock of this product.")
@@ -248,10 +248,11 @@ class StoreController:
 
                 UserInterface.displayList("The available stocks are: ", toBeDisplayed, False)
 
+    # not used in our program
     def viewProduct(self, productId):
-        # products = Store.getProducts()
-        products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
-            , ['20003', 'Dutch carrots', 'ea'], ['20004', 'Watermelon', 'ea'], ['20005', 'Rock Melon', 'ea']]
+        products = Store.getProducts()
+        # products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
+            #, ['20003', 'Dutch carrots', 'ea'], ['20004', 'Watermelon', 'ea'], ['20005', 'Rock Melon', 'ea']]
         i = 0
         found = False
         while found == False:
@@ -271,11 +272,41 @@ class StoreController:
         UserInterface.displayList("Products in Shopping Cart", listToBeDisplayed, "", False)
         # return something
 
-
-    # ML
     def browseProducts(self):
-        products = self.store.getProducts()
-        return self.store.getProducts()
+        # keyword = UserInterface.displayForm("Search Product: Please input the product you would like to search: ", [('name', 'string')])
+        # here keyword is a list, so the "real" keyword  is keyword[0]
+
+        matchingList = self.store.getProducts()
+        toBeDisplayed =[]
+        displayNumber = 0
+        for matchingProduct in matchingList:
+            tuple0 = displayNumber
+            theRest = matchingProduct.getName() + " " + matchingProduct.getUnit() + " " + matchingProduct.getSource()
+            newTuple = (tuple0, theRest)
+            toBeDisplayed.append(newTuple)
+            displayNumber += 1
+        choice = UserInterface.displayList("The matching products are: ", toBeDisplayed, "Which product to choose? X to go back.")
+
+        validInput = False
+        while not validInput:
+            if choice == "x" or choice == "X":
+                validInput = True
+                #The end of this method
+            else:
+                matchIndex = 0
+                stop = False
+                while not stop and matchIndex < len(matchingList):
+                    if choice == str(matchIndex):
+                        stop = True
+                    else:
+                        matchIndex += 1
+                if stop is False:
+                    choice = input("Please enter a valid input.")
+                else:
+                    validInput = True
+                    self.viewProductByPrice(matchingList[matchIndex].getId())
+
+
 
     # def addCustomer(self, password, name, phoneNum, address):
     # def register(self):
@@ -305,6 +336,7 @@ class StoreController:
                 validInput = True
             else:
                 pass
+
     def editProduct(self):
         idlist = self.viewAllProductID()
         validInput = False
@@ -353,6 +385,8 @@ if __name__ == '__main__':
             s.addProduct()
         elif request == 'B':
             s.browseProducts()
+        elif request == 'S':
+            s.searchProduct()
         elif request == 'E':
             s.editProduct()
         elif request == 'O':
