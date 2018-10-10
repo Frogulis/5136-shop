@@ -1,4 +1,5 @@
 
+
 class ShoppingCart:
 
     # item = [productId, actualPrice, quantity]
@@ -68,6 +69,16 @@ class ShoppingCart:
 
     def setProductsInCart(self, newList):
         self.productsInCart = newList
+
+    def __str__(self):
+        output = "Items:\n"
+        for item in self.productsInCart:
+            output = output + \
+                "Item name: {}, ".format(item[0]) + \
+                "Item price: {}, ".format(item[1]) + \
+                "Item quantity: {}, ".format(item[2]) + \
+                "\n"
+        return output
 
 # ignore - these are test calls   (ML)
 if __name__ == '__main__':

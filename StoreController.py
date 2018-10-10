@@ -64,8 +64,26 @@ class StoreController:
                     return True
         return False
 
-    def displayOrderHistory(self):
-        pass  # TODO
+    def displayOrderHistory(self, uid):
+        if uid == 'owner':
+            decision = UserInterface.displayItem("Orders to display",
+                [("Customers", "Valid customer numbers are between 1 and {}".format(len(self.store.getCustomers())))],
+                "Please enter the number of the customer whose orders you would like to see, or leave blank to see all")
+            decision = decision.lower().strip()
+            if decision == '':
+                orders = self.store.getOrderHistoryAsList()
+            else:
+                if int(decision) < len(self.store.getCustomers()) and int(decision) > 0:
+                    orders = self.store.getCustomerOrders(decision)
+                else:
+                    orders = [("Invalid customer ID")]
+        else:
+            orders = self.store.getCustomerOrders(uid)
+
+        displayOrders = [("{}:{} -- {}".format(o.getCustomerId(), o.getOrderId(), str(o.transactionDate)),
+            str(o.getShoppingCart()) + str(o.getTotalPrice())) for o in orders]
+        UserInterface.displayList("Orders", displayOrders, "Please press enter to return")
+
 
     def displayStartMenu(self):
         while True:
@@ -85,10 +103,13 @@ class StoreController:
             request = UserInterface.displayList("Monash Fruit and Vegetable Store",
                                                 list(menuItems.values()),
                                                 "Please enter one of the above options to continue").upper().strip()
-            if request in menuItems.keys():
-                UserInterface.writeLine("You said " + request)
+            if request not in menuItems.keys():
+                UserInterface.writeLine("Invalid input, please try again")
             else:
-                UserInterface.writeLine("Invalid option: " + request)
+                if request == 'O':
+                    self.displayOrderHistory(self.loginDetail)
+                else:
+                    UserInterface.writeLine("Sorry, that input is not available right now")
 
 
 
