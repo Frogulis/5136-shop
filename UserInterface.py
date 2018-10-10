@@ -47,7 +47,7 @@ class UserInterface:
         c._printWhitespace(s)
 
     @classmethod
-    def displayList(c, title, list_items, option_string, aux=None):
+    def displayList(c, title, list_items, option_string, requestInput=True, aux=None):
         c._printWhitespace('---')
         c._printWhitespace(title)
         for item in list_items:
@@ -55,9 +55,12 @@ class UserInterface:
             c._printWhitespace(item[1], 4)
         if aux is not None:
             c._printWhitespace(aux, 2)
-        c._printWhitespace(option_string)
-        i = input('Please input option: ')
-        return i
+        if requestInput:
+            c._printWhitespace(option_string)
+            i = input('Please input option: ')
+            return i
+        else:
+            return None
         
 
     @classmethod
@@ -73,8 +76,8 @@ class UserInterface:
         return i
 
     @classmethod
-    def displayItem(c, title, list_items, option_string, aux=None):
-        return c.displayList(title, list_items, option_string, aux)
+    def displayItem(c, title, list_items, option_string,  requestInput=True, aux=None):
+        return c.displayList(title, list_items, option_string, requestInput, aux)
 
 
     @classmethod
@@ -153,7 +156,7 @@ eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
     choice = input("which test u want:\n1. list\n2. form\n3. confirm")
     if choice == '1':
         print("u input: ", UserInterface.displayList(t1, li1, o1))
-        print("u input: ", UserInterface.displayList(t2, li2, o1))
+        print("u input: ", UserInterface.displayList(t2, li2, o1, False))
         print("u input: ", UserInterface.displayList(t1, li1, o1, 'some aux string'))
     elif choice == '2':
         print("u input: ", UserInterface.displayForm(t1, f1))
