@@ -249,8 +249,10 @@ class Store:
         return orderHistoryList
 
     def getCustomerOrders(self,customerId):
-        orders = self.orderHistory[customerId]
-        return orders
+        if customerId in self.orderHistory:
+            return self.orderHistory[customerId]
+        else:
+            return []        
 
     def getParticularOrder(self, customerId, orderId):
         orders = self.orderHistory[customerId]

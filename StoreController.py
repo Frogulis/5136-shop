@@ -111,6 +111,8 @@ class StoreController:
                     self.displayOrderHistory(self.loginDetail)
                 elif request == 'R':
                     self.register()
+                elif request == 'L':
+                    self.login()
                 elif request == 'X':
                     self.store.writeStore()
                     exit()
@@ -169,9 +171,14 @@ class StoreController:
         inputs = UserInterface.displayForm("Please enter your login details",
                                           [('Customer ID', 'nstring'), ('Password,' 'nstring')])
         try:
-            customer = self.store.getCustomer(inputs[0])
-            customer.logIn(inputs[1])
-            self.loginDetail = customer.getId()
+            if inputs[0] == 'owner':
+                self.store.owner.logIn(inputs[1])
+                self.loginDetail = self.store.owner.getId()
+            else:
+                customer = self.store.getCustomer(inputs[0])
+                customer.logIn(inputs[1])
+                self.loginDetail = customer.getId()
+            UserInterface.writeLine("Successfully logged in!")
         except Exception:
             UserInterface.writeLine("Invalid Customer ID and password combination")
 
@@ -240,7 +247,7 @@ class StoreController:
 
 if __name__ == '__main__':
     s = StoreController()
-    s.loginDetail = 'owner'
+    #s.loginDetail = ''
     s.displayStartMenu()
     exit()
     #s.searchProduct('ot')
