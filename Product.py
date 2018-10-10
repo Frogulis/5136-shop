@@ -117,12 +117,10 @@ class Product:
         return self.batches
 
     def getPriceGroups(self):
-        groups = {} #price: [batches]
+        groups = {} #price: quantity
         for batch in self.batches:
-            if batch.getActualPrice() in groups:
-                groups[batch.getActualPrice()].append(batch)
-            else:
-                groups[batch.getActualPrice()] = [batch]
+            if batch.getActualPrice() not in groups:
+                groups[batch.getActualPrice()] = self.calculateStock(batch.getActualPrice())
         return groups
 
     def calculateTotalQuantity(self):

@@ -72,8 +72,6 @@ class Store:
 
         ownerData = savedStore['owner']
         self.owner = OwnerAccount(ownerData['id'], ownerData['name'], ownerData['password'])
-        # ML
-        self.products = savedStore['products']
 
     def writeStore(self):  # yuki
         currStore = {'products': [],

@@ -14,10 +14,9 @@ class StoreController:
     def addProduct(self):
         inputs = UserInterface.displayForm("Please give the details of the new product",
                                            [('Name', 'nstring'), ('Unit of Measure', 'nstring')
-                                               , ('Price per unit', 'nstring'), ('Source/Origin', 'nstring')
-                                               , ('shelfLife', 'nstring')])
-        newProduct = self.store.addProduct(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
-        # self.store.addProduct(name, unit, originalPrice, source, shelfLife)
+                                               , ('Price per unit', 'money'), ('Source/Origin', 'nstring')
+                                               , ('shelfLife', 'int')])
+        self.store.addProduct(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
         self.store.writeStore()
         UserInterface.writeLine("Product added.")
 
@@ -92,6 +91,31 @@ class StoreController:
             str(o.getShoppingCart()) + str(o.getTotalPrice())) for o in orders]
         UserInterface.displayList("Orders", displayOrders, "Please press enter to return")
 
+    def displayMenuReturnOption(self):
+        while True:
+            menuItems = OrderedDict() #stays in input order
+            menuItems['B'] = ('Browse Products', 'Enter B to browse the list of products')
+            menuItems['S'] = ('Search Products', 'Enter S to search products by keyword')
+            if not self.loginDetail: #nobody logged in
+                menuItems['R'] = ('Register', 'Enter R to register an account')
+                menuItems['L'] = ('Login', 'Enter L to login to your account')
+            else:
+                menuItems['O'] = ('View Order History', 'Enter O to view order history')
+                menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
+                menuItems['T'] = ('Logout', 'Enter T to logout')
+                if self.loginDetail == 'owner':
+                    menuItems['A'] = ('Add Product', 'Enter A to add a product')
+                    menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
+                    menuItems['E'] = ('Edit Product', 'Enter E to edit a product')
+                    menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
+            menuItems['X'] = ("Exit", 'Enter X to exit')
+            request = UserInterface.displayList("Monash Fruit and Vegetable Store",
+                                                list(menuItems.values()),
+                                                "Please enter one of the above options to continue").upper().strip()
+            if request not in menuItems.keys():
+                UserInterface.writeLine("Invalid input, please try again")
+            else:
+                return request
 
     def displayStartMenu(self):
         while True:
@@ -108,6 +132,8 @@ class StoreController:
                 if self.loginDetail == 'owner':
                     menuItems['A'] = ('Add Product', 'Enter A to add a product')
                     menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
+                    menuItems['E'] = ('Edit Product', 'Enter E to edit a product')
+                    menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
             menuItems['X'] = ("Exit", 'Enter X to exit')
             request = UserInterface.displayList("Monash Fruit and Vegetable Store",
                                                 list(menuItems.values()),
@@ -119,12 +145,16 @@ class StoreController:
                     self.addProduct()
                 elif request == 'B':
                     self.browseProducts()
+                elif request == 'E':
+                    self.editProduct()
                 elif request == 'O':
                     self.displayOrderHistory(self.loginDetail)
                 elif request == 'R':
                     self.register()
                 elif request == 'L':
                     self.login()
+                elif request == 'RP':
+                    self.removeProduct()
                 elif request == 'T':
                     self.logout()
                 elif request == 'X':
@@ -157,6 +187,18 @@ class StoreController:
     #         # show new product details
     #         # ask for confirmation
     #     # TODO
+
+    def viewAllProductID(self):
+        toBeDisplayed = []
+        productIds = []
+        for product in self.store.getProducts():
+            id = product.getId()
+            nameUnitSource = product.getName() + " " + product.getUnit() + " " + product.getSource()
+            toBeDisplayed.append((id, nameUnitSource))
+            productIds.append(id)
+        UserInterface.displayList("All product and their IDs: ", toBeDisplayed, "", False)
+        return productIds
+
 
     def editBatchQuantity(self, productId, batchId):
         currentQuantity = self.store.getProduct(productId).getBatch(batchId).getQuantity()
@@ -223,14 +265,58 @@ class StoreController:
         UserInterface.writeLine("Successfully registered! Your ID is {}. You will be automatically logged in.".format(newCustomer.getId()))
         self.loginDetail = newCustomer.getId()
 
-    # def searchProduct(self):
-    #     ## ask for input
-    #     keyword = pass
-    #     matching = self.store.searchProductByName(keyword)
-    #     ## display matching
-    #     pass  # TODO
+    def searchProduct(self):
+        keyword = UserInterface.displayForm("Search Product","Please input the product you would like to search: ")
+        matchingList = self.store.searchProductByName(keyword)
+        toBeDisplayed =[]
+        displayNumber = 0
+        for matchingProduct in matchingList:
+            tuple0 = displayNumber
+            theRest = matchingProduct.getName() + matchingProduct.getUnit() + " " + matchingProduct.getSource()
+            newTuple = (tuple0, theRest)
+            toBeDisplayed.append(newTuple)
+            displayNumber += 1
+        choice = UserInterface.displayList("The matching products are: ", toBeDisplayed, "Which product to choose? X to go back.")
 
-    # ML
+        validInput = False
+        while not validInput:
+            if choice == "x" or choice == "X":
+                validInput = True
+                #The end of this method
+            else:
+                matchIndex = 0
+                stop = False
+                while not stop and matchIndex < len(matchingList):
+                    if choice == str(matchIndex):
+                        stop = True
+                    else:
+                        matchIndex += 1
+                if stop is False:
+                    choice = input("Please enter a valid input.")
+                else:
+                    validInput = True
+                    self.viewProduct(matchingList[matchIndex].getId())
+
+
+
+
+    def viewProductByPrice(self,productId):
+        product = self.store.getProduct(productId)
+        tuple0 = product.getName()
+        tuple1 = product.getSource() + product.getUnit() + product.originalPrice()
+        UserInterface.displayList("Product details: ", [tuple0, tuple1], "", False)
+        priceGroup = product.getPriceGroups()
+        if priceGroup == {}:
+            UserInterface.writeLine("There is no stock of this product.")
+        else:
+            toBeDisplayed = []
+            for everyPrice in priceGroup:
+                newtuple0 = "Price: " + str(everyPrice)
+                newtuple1 = "Quantity: " + str(priceGroup[everyPrice])
+                toBeDisplayed.append((newtuple0,newtuple1))
+
+                UserInterface.displayList("The available stocks are: ", toBeDisplayed, False)
+
     def viewProduct(self, productId):
         # products = Store.getProducts()
         products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
@@ -264,25 +350,97 @@ class StoreController:
         # prompt confirmation
         self.store.removeCustomer(customerId)
 
-    def removeProduct(self, productId):
-        self.store.removeProduct(productId)
-
+    def removeProduct(self):
+        idlist = self.viewAllProductID()
+        validInput = False
+        while not validInput:
+            productIdInput = input("Please input id, x to quit")
+            # productIdInput = UserInterface.displayForm("Id of the product to be removed: ", "please input Id, X to cancel ")
+            if productIdInput in idlist:
+                self.store.removeProduct(productIdInput)
+                validInput = True
+                UserInterface.writeLine("Product removed.")
+            elif productIdInput.upper() == "X":
+                validInput = True
+            else:
+                pass
+    def editProduct(self):
+        idlist = self.viewAllProductID()
+        validInput = False
+        while not validInput:
+            productIdInput = input("Please input id, x to quit")
+            # productIdInput = UserInterface.displayForm("Id of the product to be removed: ", "please input Id, X to cancel ")
+            if productIdInput in idlist:
+                while True:
+                    UserInterface.writeLine("You would like to change product: ")
+                    metadataToBeEdited = input("A. Name  B. Unit C. Source D. Original Price E. Cancel").upper()
+                    if metadataToBeEdited == "A":
+                        newName = input("New product name: ")
+                        self.store.editProductName(productIdInput,newName)
+                        break
+                    elif metadataToBeEdited == "B":
+                        newUnit = input("New Unit:")
+                        self.store.editProductUnit(productIdInput,newUnit)
+                        break
+                    elif metadataToBeEdited == "C":
+                        newSource = input("New Source:")
+                        self.store.editProductSource(productIdInput,newSource)
+                        break
+                    elif metadataToBeEdited == "D":
+                        newOP = input("New Original Price")
+                        self.store.editProductOriginalPrice(productIdInput,newOP)
+                        break
+                    elif metadataToBeEdited == "E":
+                        break
+                    else:
+                        UserInterface.writeLine("Invalid Input")
+                validInput = True
+                UserInterface.writeLine("Product edited.")
+            elif productIdInput.upper() == "X":
+                validInput = True
+            else:
+                pass
 
 
 
 
 if __name__ == '__main__':
     s = StoreController()
-    #s.loginDetail = ''
-    s.displayStartMenu()
-    exit()
-    #s.searchProduct('ot')
-    s.store.addCustomer('cs1','cs1','0450563312','add1')
-    s.store.addCustomer('cs2','cs3','0450563312','add1')
-    s.store.addCustomer('cs3','cs3','0450563312','add1')
-    s.store.addProduct('apple','kg',5, 'China', 10)
-    s.store.addProduct('banana', 'kg', 3, 'China', 5)
-    s.store.getProduct('1').addBatch(20)
-    s.store.getProduct('2').addBatch(30)
+    while True:
+        request = s.displayMenuReturnOption()
+        if request == 'A':  # ML
+            s.addProduct()
+        elif request == 'B':
+            s.browseProducts()
+        elif request == 'E':
+            s.editProduct()
+        elif request == 'O':
+            s.displayOrderHistory(s.loginDetail)
+        elif request == 'R':
+            s.register()
+        elif request == 'L':
+            s.login()
+        elif request == 'RP':
+            s.removeProduct()
+        elif request == 'T':
+            s.logout()
+        elif request == 'X':
+            s.store.writeStore()
+            exit()
+        else:
+            UserInterface.writeLine("Sorry, that input is not available right now")
 
-    s.editBatchQuantity('1','1')
+
+    # s.loginDetail = ''
+    # s.displayStartMenu()
+    # exit()
+    # #s.searchProduct('ot')
+    # s.store.addCustomer('cs1','cs1','0450563312','add1')
+    # s.store.addCustomer('cs2','cs3','0450563312','add1')
+    # s.store.addCustomer('cs3','cs3','0450563312','add1')
+    # s.store.addProduct('apple','kg',5, 'China', 10)
+    # s.store.addProduct('banana', 'kg', 3, 'China', 5)
+    # s.store.getProduct('1').addBatch(20)
+    # s.store.getProduct('2').addBatch(30)
+    #
+    # s.editBatchQuantity('1','1')
