@@ -101,13 +101,15 @@ class StoreController:
                 menuItems['L'] = ('Login', 'Enter L to login to your account')
             else:
                 menuItems['O'] = ('View Order History', 'Enter O to view order history')
-                menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
                 menuItems['T'] = ('Logout', 'Enter T to logout')
                 if self.loginDetail == 'owner':
                     menuItems['A'] = ('Add Product', 'Enter A to add a product')
                     menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
                     menuItems['E'] = ('Edit Product', 'Enter E to edit a product')
                     menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
+                else:
+                    menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
+                    menuItems['SC'] = ('View Shopping Cart', 'Enter SC to view shopping cart')
             menuItems['X'] = ("Exit", 'Enter X to exit')
             request = UserInterface.displayList("Monash Fruit and Vegetable Store",
                                                 list(menuItems.values()),
@@ -162,31 +164,6 @@ class StoreController:
                     exit()
                 else:
                     UserInterface.writeLine("Sorry, that input is not available right now")
-
-
-
-    # def editProduct(self,productId):
-    #     # get user input
-    #     # editOption = pass
-    #     while ...:
-    #         if editOption == "Name":
-    #             #newName = pass
-    #             self.store.editProductName(productId, newName)
-    #         elif editOption == "Unit":
-    #             #newUnit = pass
-    #             self.store.editProductUnit(productId, newUnit)
-    #         elif editOption == "Original Price":
-    #             newPrice = pass
-    #             self.store.editProductOriginalPrice(productId, newPrice)
-    #         elif editOption == "Source":
-    #             newSource = pass
-    #             self.store.editProductSource(productId, newSource)
-    #         elif editOption == "Shelf Life":
-    #             newShelfLife = pass
-    #             self.store.editProductShelfLife(productId, newShelfLife)
-    #         # show new product details
-    #         # ask for confirmation
-    #     # TODO
 
     def viewAllProductID(self):
         toBeDisplayed = []
