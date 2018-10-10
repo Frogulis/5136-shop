@@ -97,6 +97,7 @@ class StoreController:
             else:
                 menuItems['O'] = ('View Order History', 'Enter O to view order history')
                 menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
+                menuItems['T'] = ('Logout', 'Enter L to logout')
                 if self.loginDetail == 'owner':
                     menuItems['A'] = ('Add Product', 'Enter A to add a product')
                     menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
@@ -113,6 +114,8 @@ class StoreController:
                     self.register()
                 elif request == 'L':
                     self.login()
+                elif request == 'T' and not self.loginDetail:
+                    self.logout()
                 elif request == 'X':
                     self.store.writeStore()
                     exit()
@@ -182,9 +185,19 @@ class StoreController:
         except Exception:
             UserInterface.writeLine("Invalid Customer ID and password combination")
 
+    #ML
     def logout(self):
         # ask for confirm from user
+        if self.loginDetail is None:
+            pass
+        elif self.loginDetail == 'owner':
+            self.store.owner.setLoggedIn(False)
+        else:
+            customer = self.store.getCustomer(self.loginDetail)
+            customer.setLoggedIn(False)
+
         self.loginDetail = None
+        UserInterface.writeLine("Logged out successfully.")
 
     def register(self):
         inputs = UserInterface.displayForm("Please enter your user details to register.\nYour userID will be generated automatically.",
