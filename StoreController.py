@@ -11,8 +11,15 @@ class StoreController:
         self.store = Store()
 
 
-    def addProduct(self, name, unit, originalPrice, source, shelfLife):
-        self.store.addProduct(name, unit, originalPrice, source, shelfLife)
+    def addProduct(self):
+        inputs = UserInterface.displayForm("Please give the details of the new product",
+                                           [('Name', 'nstring'), ('Unit of Measure', 'nstring')
+                                               , ('Price per unit', 'nstring'), ('Source/Origin', 'nstring')
+                                               , ('shelfLife', 'nstring')])
+        newProduct = self.store.addProduct(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
+        # self.store.addProduct(name, unit, originalPrice, source, shelfLife)
+        self.store.writeStore()
+        UserInterface.writeLine("Product added.")
 
     # the controller have the customerId stored already, so we do not need the parameter
     def checkOut(self):
@@ -108,7 +115,9 @@ class StoreController:
             if request not in menuItems.keys():
                 UserInterface.writeLine("Invalid input, please try again")
             else:
-                if request == 'O':
+                if request == 'A':  #ML
+                   self.addProduct()
+                elif request == 'O':
                     self.displayOrderHistory(self.loginDetail)
                 elif request == 'R':
                     self.register()
@@ -172,7 +181,7 @@ class StoreController:
     #ML
     def login(self):
         inputs = UserInterface.displayForm("Please enter your login details",
-                                          [('Customer ID', 'nstring'), ('Password,' 'nstring')])
+                                          [('Customer ID', 'nstring'), ('Password', 'nstring')])
         try:
             if inputs[0] == 'owner':
                 self.store.owner.logIn(inputs[1])
