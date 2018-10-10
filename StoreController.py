@@ -169,7 +169,7 @@ class StoreController:
     #ML
     def login(self):
         inputs = UserInterface.displayForm("Please enter your login details",
-                                          [('Customer ID', 'nstring'), ('Password,' 'nstring')])
+                                          [('Customer ID', 'nstring'), ('Password', 'nstring')])
         try:
             if inputs[0] == 'owner':
                 self.store.owner.logIn(inputs[1])
