@@ -262,6 +262,16 @@ class StoreController:
         #print(products[i])
         return products[i]
 
+    def viewShoppingCart(self, customerId):
+        shoppingCart = self.store.getCustomer(customerId).getShoppingCart().getProductsInCart()
+        listToBeDisplayed = []
+        for listhaha in shoppingCart:
+            pName = self.store.getProduct(listhaha[0]).getName()
+            listToBeDisplayed.append((pName,listhaha[1:]))
+        UserInterface.displayList("Products in Shopping Cart", listToBeDisplayed, "", False)
+        # return something
+
+
     # ML
     def browseProducts(self):
         products = self.store.getProducts()
