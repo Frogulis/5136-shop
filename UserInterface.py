@@ -87,7 +87,7 @@ class UserInterface:
         inputs = []
         for item in fields:
             c._printWhitespace(item[0], 2)
-            inputs.append(input())
+            inputs.append(c.tryInput(item))
         if aux is not None:
             c._printWhitespace(aux, 2)
         return inputs
