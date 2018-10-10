@@ -104,7 +104,6 @@ class StoreController:
                 if self.loginDetail == 'owner':
                     menuItems['A'] = ('Add Product', 'Enter A to add a product')
                     menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
-                    menuItems['E'] = ('Edit Product', 'Enter E to edit a product')
                     menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
                 else:
                     menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
@@ -203,7 +202,7 @@ class StoreController:
         displayNumber = 0
         for matchingProduct in matchingList:
             tuple0 = displayNumber
-            theRest = matchingProduct.getName() + matchingProduct.getUnit() + " " + matchingProduct.getSource()
+            theRest = matchingProduct.getName() + " " + matchingProduct.getUnit() + " " + matchingProduct.getSource()
             newTuple = (tuple0, theRest)
             toBeDisplayed.append(newTuple)
             displayNumber += 1
@@ -213,6 +212,7 @@ class StoreController:
         while not validInput:
             if choice == "x" or choice == "X":
                 validInput = True
+                return None
                 #The end of this method
             else:
                 matchIndex = 0
@@ -226,7 +226,8 @@ class StoreController:
                     choice = input("Please enter a valid input.")
                 else:
                     validInput = True
-                    self.viewProductByPrice(matchingList[matchIndex].getId())
+                    return matchingList[matchIndex].getId()
+                    #self.viewProductByPrice(matchingList[matchIndex].getId())
 
     def viewProductByPrice(self, productId):
         product = self.store.getProduct(productId)
@@ -245,8 +246,21 @@ class StoreController:
                 newtuple0 = "Price: " + str(everyPrice)
                 newtuple1 = "Quantity: " + str(priceGroup[everyPrice])
                 toBeDisplayed.append((newtuple0,newtuple1))
-
-                UserInterface.displayList("The available stocks are: ", toBeDisplayed, False)
+            UserInterface.displayList("The available stocks are: ", toBeDisplayed, "", False)
+        # menu of this product
+        further = None
+        if self.loginDetail is None:
+            pass
+        elif self.loginDetail == 'owner':
+            # allow owner to edit product
+            toEdit = UserInterface.displayConfirm("", "Do you wish to edit this Product?")
+            if toEdit == 'y':
+                self.editProduct(productId)  # TODO
+        else:
+            # allow customer to addShoppingCart
+            ToAdd = UserInterface.displayConfirm("", "Do you wish to add this Product into shopping cart?")
+            pass
+        return further
 
     # not used in our program
     def viewProduct(self, productId):
@@ -285,26 +299,8 @@ class StoreController:
             newTuple = (tuple0, theRest)
             toBeDisplayed.append(newTuple)
             displayNumber += 1
-        choice = UserInterface.displayList("The matching products are: ", toBeDisplayed, "Which product to choose? X to go back.")
+        UserInterface.displayList("The matching products are: ", toBeDisplayed, "", False)
 
-        validInput = False
-        while not validInput:
-            if choice == "x" or choice == "X":
-                validInput = True
-                #The end of this method
-            else:
-                matchIndex = 0
-                stop = False
-                while not stop and matchIndex < len(matchingList):
-                    if choice == str(matchIndex):
-                        stop = True
-                    else:
-                        matchIndex += 1
-                if stop is False:
-                    choice = input("Please enter a valid input.")
-                else:
-                    validInput = True
-                    self.viewProductByPrice(matchingList[matchIndex].getId())
 
 
 
@@ -336,43 +332,28 @@ class StoreController:
                 validInput = True
             else:
                 pass
-
-    def editProduct(self):
-        idlist = self.viewAllProductID()
-        validInput = False
-        while not validInput:
-            productIdInput = input("Please input id, x to quit")
-            # productIdInput = UserInterface.displayForm("Id of the product to be removed: ", "please input Id, X to cancel ")
-            if productIdInput in idlist:
-                while True:
-                    UserInterface.writeLine("You would like to change product: ")
-                    metadataToBeEdited = input("A. Name  B. Unit C. Source D. Original Price E. Cancel").upper()
-                    if metadataToBeEdited == "A":
-                        newName = input("New product name: ")
-                        self.store.editProductName(productIdInput,newName)
-                        break
-                    elif metadataToBeEdited == "B":
-                        newUnit = input("New Unit:")
-                        self.store.editProductUnit(productIdInput,newUnit)
-                        break
-                    elif metadataToBeEdited == "C":
-                        newSource = input("New Source:")
-                        self.store.editProductSource(productIdInput,newSource)
-                        break
-                    elif metadataToBeEdited == "D":
-                        newOP = input("New Original Price")
-                        self.store.editProductOriginalPrice(productIdInput,newOP)
-                        break
-                    elif metadataToBeEdited == "E":
-                        break
-                    else:
-                        UserInterface.writeLine("Invalid Input")
-                validInput = True
-                UserInterface.writeLine("Product edited.")
-            elif productIdInput.upper() == "X":
-                validInput = True
+            
+    # modify the edit product so that it only happens after view
+    def editProduct(self, productId):
+        attToEdit = None
+        while attToEdit is None:
+            select = UserInterface.displayForm("A. Name  B. Unit C. Source D. Original Price E. Cancel", [('select:','string')])
+            if select[0].upper().strip() == 'E':
+                attToEdit = None
             else:
-                pass
+                if select[0].upper().strip() == 'A':
+                    newData = UserInterface.displayForm('input:',[('','string')])
+                    self.store.editProductName(productId, newData[0])
+                elif select[0].upper().strip() == 'B':
+                    newData = UserInterface.displayForm('input:',[('','string')])
+                    self.store.editProductUnit(productId, newData[0])
+                elif select[0].upper().strip() == 'C':
+                    newData = UserInterface.displayForm('input:',[('','string')])
+                    self.store.editProductSource(productId, newData[0])
+                elif select[0].upper().strip() == 'D':
+                    newData = UserInterface.displayForm('input:', [('', 'string')])
+                    self.store.editProductOriginalPrice(productId, newData[0])
+                attToEdit = True
 
 
 
@@ -384,11 +365,11 @@ if __name__ == '__main__':
         if request == 'A':  # ML
             s.addProduct()
         elif request == 'B':
-            s.browseProducts()
+            s.browseProducts()  # yuki
         elif request == 'S':
-            s.searchProduct()
-        elif request == 'E':
-            s.editProduct()
+            selectP = s.searchProduct()  # yuki
+            if selectP is not None:
+                s.viewProductByPrice(selectP)
         elif request == 'O':
             s.displayOrderHistory(s.loginDetail)
         elif request == 'R':
