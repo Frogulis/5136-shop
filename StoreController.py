@@ -39,7 +39,8 @@ class StoreController:
                 currentCustomer.topUp(topUpValue)
             for eachProduct in shoppingCart:
                 eachProduct.deductStock(eachProduct[1],eachProduct[2])
-            newOrder = self.store.addOrder(self.loginDetail, shoppingCart, totalPrice)
+            shoppingCartCopy = shoppingCart[:]
+            newOrder = self.store.addOrder(self.loginDetail, shoppingCartCopy, totalPrice)
             #translate order into list of tuples(name, everthing else)
             orderId = newOrder.getOrderId() # str
             newShoppingCart = newOrder.getShoppingCart()
