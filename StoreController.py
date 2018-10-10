@@ -162,9 +162,16 @@ class StoreController:
         self.store.getProduct(productId).deductStock(actualPrice,newQuantity)
         #display new quantity
 
+    #ML
     def login(self):
-        # TODO ask for input of userName and password
-        self.loginDetail = ""  # should be userId here
+        inputs = UserInterface.displayForm("Please enter your login details",
+                                          [('Customer ID', 'nstring'), ('Password,' 'nstring')])
+        try:
+            customer = self.store.getCustomer(inputs[0])
+            customer.logIn(inputs[1])
+            self.loginDetail = customer.getId()
+        except Exception:
+            UserInterface.writeLine("Invalid Customer ID and password combination")
 
     def logout(self):
         # ask for confirm from user
