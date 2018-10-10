@@ -115,8 +115,8 @@ class StoreController:
             if request not in menuItems.keys():
                 UserInterface.writeLine("Invalid input, please try again")
             else:
-                if request == 'A':  #ML
-                   self.addProduct()
+                if request == 'A':  # ML
+                    self.addProduct()
                 elif request == 'O':
                     self.displayOrderHistory(self.loginDetail)
                 elif request == 'R':
