@@ -88,6 +88,7 @@ class StoreController:
 
     def displayStartMenu(self):
         while True:
+
             menuItems = OrderedDict() #stays in input order
             menuItems['B'] = ('Browse Products', 'Enter B to browse the list of products')
             menuItems['S'] = ('Search Products', 'Enter S to search products by keyword')
@@ -108,6 +109,7 @@ class StoreController:
             if request not in menuItems.keys():
                 UserInterface.writeLine("Invalid input, please try again")
             else:
+
                 if request == 'O':
                     self.displayOrderHistory(self.loginDetail)
                 elif request == 'R':
