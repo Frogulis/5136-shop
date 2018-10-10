@@ -119,52 +119,6 @@ class StoreController:
             else:
                 return request
 
-    def displayStartMenu(self):
-        while True:
-            menuItems = OrderedDict() #stays in input order
-            menuItems['B'] = ('Browse Products', 'Enter B to browse the list of products')
-            menuItems['S'] = ('Search Products', 'Enter S to search products by keyword')
-            if not self.loginDetail: #nobody logged in
-                menuItems['R'] = ('Register', 'Enter R to register an account')
-                menuItems['L'] = ('Login', 'Enter L to login to your account')
-            else:
-                menuItems['O'] = ('View Order History', 'Enter O to view order history')
-                menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
-                menuItems['T'] = ('Logout', 'Enter T to logout')
-                if self.loginDetail == 'owner':
-                    menuItems['A'] = ('Add Product', 'Enter A to add a product')
-                    menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
-                    menuItems['E'] = ('Edit Product', 'Enter E to edit a product')
-                    menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
-            menuItems['X'] = ("Exit", 'Enter X to exit')
-            request = UserInterface.displayList("Monash Fruit and Vegetable Store",
-                                                list(menuItems.values()),
-                                                "Please enter one of the above options to continue").upper().strip()
-            if request not in menuItems.keys():
-                UserInterface.writeLine("Invalid input, please try again")
-            else:
-                if request == 'A':  # ML
-                    self.addProduct()
-                elif request == 'B':
-                    self.browseProducts()
-                elif request == 'E':
-                    self.editProduct()
-                elif request == 'O':
-                    self.displayOrderHistory(self.loginDetail)
-                elif request == 'R':
-                    self.register()
-                elif request == 'L':
-                    self.login()
-                elif request == 'RP':
-                    self.removeProduct()
-                elif request == 'T':
-                    self.logout()
-                elif request == 'X':
-                    self.store.writeStore()
-                    exit()
-                else:
-                    UserInterface.writeLine("Sorry, that input is not available right now")
-
     def viewAllProductID(self):
         toBeDisplayed = []
         productIds = []
@@ -243,7 +197,7 @@ class StoreController:
         self.loginDetail = newCustomer.getId()
 
     def searchProduct(self):
-        keyword = UserInterface.displayForm("Search Product","Please input the product you would like to search: ")
+        keyword = UserInterface.displayForm("Search Product: Please input the product you would like to search: ", ('name', 'string'))
         matchingList = self.store.searchProductByName(keyword)
         toBeDisplayed =[]
         displayNumber = 0
@@ -399,6 +353,9 @@ if __name__ == '__main__':
             s.login()
         elif request == 'RP':
             s.removeProduct()
+        elif request == 'SC':
+            #viewshoppingcart
+            pass
         elif request == 'T':
             s.logout()
         elif request == 'X':
