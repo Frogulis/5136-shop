@@ -109,6 +109,8 @@ class StoreController:
             else:
                 if request == 'O':
                     self.displayOrderHistory(self.loginDetail)
+                elif request == 'R':
+                    self.register()
                 elif request == 'X':
                     self.store.writeStore()
                     exit()
@@ -170,6 +172,18 @@ class StoreController:
         # ask for confirm from user
         self.loginDetail = None
 
+    def register(self):
+        inputs = UserInterface.displayForm("Please enter your user details to register.\nYour userID will be generated automatically.",
+            [('Type your password', 'nstring'), ('Type your password again', 'nstring'),
+             ('Enter your name', 'nstring'), ('Enter your phone number', 'nstring'),
+             ('Enter your address', 'nstring')])
+        while inputs[0] != inputs[1]:
+            inputs[0:2] = UserInterface.displayForm("Passwords don't match! Please try again",
+                [('Type your password', 'nstring'), ('Type your password again', 'nstring')])
+        newCustomer = self.store.addCustomer(inputs[0], inputs[2], inputs[3], inputs[4])
+        self.store.writeStore()
+        UserInterface.writeLine("Successfully registered! Your ID is {}. You will be automatically logged in.".format(newCustomer.getId()))
+        self.loginDetail = newCustomer.getId()
 
     # def searchProduct(self):
     #     ## ask for input

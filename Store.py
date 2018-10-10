@@ -129,6 +129,7 @@ class Store:
         cid = self.generateNewCustomerId()
         newCustomer = CustomerAccount(cid, password, name, phoneNum, address)
         self.customers.append(newCustomer)
+        return newCustomer
 
     def addOrder(self, customerId, sCart=None, tPrice=0.0, tDate=datetime.datetime.now()):
         if customerId not in self.orderHistory:
