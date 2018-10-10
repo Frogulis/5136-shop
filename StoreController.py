@@ -117,6 +117,8 @@ class StoreController:
             else:
                 if request == 'A':  # ML
                     self.addProduct()
+                elif request == 'B':
+                    self.browseProducts()
                 elif request == 'O':
                     self.displayOrderHistory(self.loginDetail)
                 elif request == 'R':
@@ -228,7 +230,7 @@ class StoreController:
     #     ## display matching
     #     pass  # TODO
 
-    #ML
+    # ML
     def viewProduct(self, productId):
         # products = Store.getProducts()
         products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
@@ -243,8 +245,10 @@ class StoreController:
         #print(products[i])
         return products[i]
 
+    # ML
     def browseProducts(self):
-        return self.Store.products
+        products = self.store.getProducts()
+        return self.store.getProducts()
 
     # def addCustomer(self, password, name, phoneNum, address):
     # def register(self):
