@@ -97,7 +97,7 @@ class StoreController:
             else:
                 menuItems['O'] = ('View Order History', 'Enter O to view order history')
                 menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
-                menuItems['T'] = ('Logout', 'Enter L to logout')
+                menuItems['T'] = ('Logout', 'Enter T to logout')
                 if self.loginDetail == 'owner':
                     menuItems['A'] = ('Add Product', 'Enter A to add a product')
                     menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
@@ -114,7 +114,7 @@ class StoreController:
                     self.register()
                 elif request == 'L':
                     self.login()
-                elif request == 'T' and not self.loginDetail:
+                elif request == 'T':
                     self.logout()
                 elif request == 'X':
                     self.store.writeStore()
