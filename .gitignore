@@ -25,5 +25,6 @@ __pycache*
 hs_err_pid*
 
 \.idea/
-testbyyuki.json
+
+.json
 

@@ -56,7 +56,7 @@ class Store:
             for eachOrder in cOrderList:
                 orderId = eachOrder['orderId']
                 orderCId = eachOrder['customerId']
-                tempShoppingCart = eachOrder['shoppingCart']############
+                tempShoppingCart = eachOrder['shoppingCart']
                 orderShoppingCart = ShoppingCart()
                 orderShoppingCart.setProductsInCart(tempShoppingCart)
                 orderTotalPrice = eachOrder['totalPrice']
@@ -98,7 +98,7 @@ class Store:
                             'name': customer.getName(),
                             'phoneNumber': customer.getPhoneNumber(),
                             'address': customer.getAddress(),
-                            'shoppingCart': customer.getShoppingCart().productsInCart,  ###
+                            'shoppingCart': customer.getShoppingCart().productsInCart,
                             'balance': customer.getBalance()}
             currStore['customers'].append(customerData)
 
@@ -136,6 +136,7 @@ class Store:
         nid = self.generateNewOrderId(customerId)
         newOrder = Order(nid, customerId, sCart, tPrice, tDate)
         self.orderHistory[customerId].append(newOrder)
+        return newOrder
 
     def generateNewCustomerId(self):
         if len(self.customers) == 0:
@@ -286,12 +287,14 @@ class Store:
 if __name__ == '__main__':
     # there are some issue with the batchIdCounter. for every batch i build, the Id was always '1'
     s = Store()
+
     #s.getProduct('1').addBatch(10)
+    #s.getProduct('1').deductStock(5,14)
 
     for p in s.products:
-        print('pid', p.getId())
+        print(' pid', p.getId())
         for batch in p.getBatches():
-            print('b', batch.getActualPrice())
+            print('bid', batch.getBatchID(), 'acPrice', batch.getActualPrice(), 'quantity', batch.getQuantity())
     for c in s.customers:
         print('id', c.getId())
         print('ShoppingCart', c.getShoppingCart().productsInCart)
