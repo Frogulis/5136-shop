@@ -27,25 +27,42 @@ class Product:
 
     # Please check if there is enough stock before using this method,
     # there is no validation in this method.
-    def deductStock(self,actualPrice,quantity):
-        remainingQuantity = quantity
+    # def deductStock(self,actualPrice,quantity):
+    #     remainingQuantity = quantity
+    #     for batchIndex in range(0, len(self.batches)):
+    #         currentBatch = self.batches[batchIndex]
+    #         if currentBatch.actualPrice == actualPrice:
+    #             if currentBatch.quantity == remainingQuantity:
+    #                 remainingQuantity = 0
+    #                 del self.batches[batchIndex]
+    #                 break
+    #             elif currentBatch.quantity > remainingQuantity:
+    #                 currentBatch.setQuantity(currentBatch.quantity - remainingQuantity)
+    #                 remainingQuantity = 0
+    #                 break
+    #             elif currentBatch.quantity < remainingQuantity:
+    #                 remainingQuantity -= currentBatch.quantity
+    #                 del self.batches[batchIndex]
+    #         else:
+    #             batchIndex += 1
+
+    def deductStock(self,actualPrice, quantity):
+        remQuantity = quantity
+        batchIndexToBeDel = []
         for batchIndex in range(len(self.batches)):
-            currentBatch = self.batches[batchIndex]
-            if currentBatch.actualPrice == actualPrice:
-                if currentBatch.quantity == remainingQuantity:
-                    remainingQuantity = 0
-                    del self.batches[batchIndex]
+            curBatch = self.batches[batchIndex]
+            if curBatch.getActualPrice() == actualPrice:
+                if curBatch.getQuantity() == remQuantity:
+                    batchIndexToBeDel.append(curBatch)
                     break
-                elif currentBatch.quantity > remainingQuantity:
-                    currentBatch.setQuantity(currentBatch.quantity - remainingQuantity)
-                    remainingQuantity = 0
+                elif curBatch.getQuantity() < remQuantity:
+                    batchIndexToBeDel.append(curBatch)
+                    remQuantity -= curBatch.getQuantity()
+                elif curBatch.getQuantity() > remQuantity:
+                    curBatch.setQuantity(curBatch.getQuantity()-remQuantity)
                     break
-                elif currentBatch.quantity < remainingQuantity:
-                    remainingQuantity -= currentBatch.quantity
-                    del self.batches[batchIndex]
-                    batchIndex += 1
-            else:
-                batchIndex += 1
+        for batch in batchIndexToBeDel:
+            self.batches.remove(batch)
 
     def setId(self, my_id):
         self.id = my_id
@@ -69,7 +86,7 @@ class Product:
         if len(self.batches) == 0:
             newBatchId = 1
         else:
-            newBatchId = str(int(self.batches[-1].getBatchId())+1)
+            newBatchId = str(int(self.batches[-1].getBatchID())+1)
         return newBatchId
 
     def getId(self):
