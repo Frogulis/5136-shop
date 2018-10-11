@@ -1,8 +1,6 @@
 from collections import OrderedDict
 
 from Store import Store
-from UserAccount import UserAccount
-from CustomerAccount import CustomerAccount
 from UserInterface import UserInterface
 
 class StoreController:
