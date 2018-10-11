@@ -148,7 +148,7 @@ class Product:
 
     def updateDiscount(self):
         for batch in self.batches:
-            batch.setActualPrice(batch.getDiscount() * self.originalPrice)
+            batch.setActualPrice(round(batch.getDiscount() * self.originalPrice),2)
 
     # return total quantity of that particular price
     def calculateStock(self, price):
