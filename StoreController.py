@@ -172,11 +172,6 @@ class StoreController:
 
     def manageAccount(self):
         customer = self.store.getCustomer(self.loginDetail)
-        name = customer.getName()
-        pwd = customer.getPassword()
-        phoneNumber = customer.getPhoneNumber()
-        address = customer.getAddress()
-        balance = customer.getBalance()
 
         # option_String = 'Edit Options: 1- Name   2- Password   3- Phone Number   4- Address   5- Balance'
         # keyboardInput = UserInterface.displayList('Account Info.', [('Name', name), ('Password', pwd), ('Phone', phoneNumber)
@@ -185,8 +180,11 @@ class StoreController:
         while True:
             option_String = 'Edit Options: N- Name   P- Password   C- Phone Number   A- Address   B- Top Up Balance  X- Exit'
             keyboardInput = UserInterface.displayList('Account Info.',
-                                                      [('Name', name), ('Password', pwd), ('Phone', phoneNumber)
-                                                          , ('Address', address), ('Balance', balance)], option_String).strip().upper()
+                                                      [('Name', customer.getName()),
+                                                      ('Password', customer.getPassword()),
+                                                      ('Phone', customer.getPhoneNumber()),
+                                                      ('Address', customer.getAddress()),
+                                                      ('Balance', customer.getBalance())], option_String).strip().upper()
             if keyboardInput == 'N':
                 name = UserInterface.displayForm('Please give a new value for -', [('Name', 'nstring')])
                 name = name[0]
