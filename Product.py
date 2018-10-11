@@ -84,7 +84,7 @@ class Product:
 
     def generateBatchId(self):
         if len(self.batches) == 0:
-            newBatchId = 1
+            newBatchId = str(1)
         else:
             newBatchId = str(int(self.batches[-1].getBatchID())+1)
         return newBatchId
@@ -115,6 +115,9 @@ class Product:
 
     def getBatches(self):
         return self.batches
+
+    def getExpiringBatches(self):
+        return [batch for batch in self.batches if batch.nearExpiry()]
 
     def getPriceGroups(self):
         groups = {} #price: quantity

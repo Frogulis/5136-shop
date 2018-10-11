@@ -33,10 +33,13 @@ class ProductTest(unittest.TestCase):
 
     def test5(self):
         p = Product()
-        prev = p.generateBatchId()
+        p.addBatch(1)
+        prev = p.getBatches()[-1].getBatchID()
         for _ in range(10):
-            a = p.generateBatchId()
-            self.assertTrue(a != prev)
+            p.addBatch(1)
+            a = p.getBatches()[-1].getBatchID()
+            self.assertTrue(a != prev, "{}, {}".format(a, prev))
+            #print(a, prev)
             prev = a
 
 if __name__ == '__main__':

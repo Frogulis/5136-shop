@@ -106,6 +106,7 @@ class StoreController:
                 menuItems['O'] = ('View Order History', 'Enter O to view order history')
                 menuItems['T'] = ('Logout', 'Enter T to logout')
                 if self.loginDetail == 'owner':
+                    menuItems['EX'] = ('View Expiring Products', 'Enter EX to view expiring products')
                     menuItems['A'] = ('Add Product', 'Enter A to add a product')
                     menuItems['RC'] = ('Remove Customer', 'Enter RC to remove a customer')
                     menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
@@ -331,6 +332,18 @@ class StoreController:
         UserInterface.displayList("All customers and their IDs: ", toBeDisplayed, "", False)
         return customerIds
 
+    def viewExpiringProducts(self):
+        products = self.store.getProducts()
+        paired = []
+        for p in products:
+            for b in p.getExpiringBatches():
+                paired.append(("Name: {}, Product ID: {}, Batch ID: {}".format(p.getName(), p.getId(), b.getBatchID()),
+                    "Expiring: {}".format(b.getExpiryDate())))
+        if len(paired) > 0:
+            UserInterface.displayList("Expiring product batches", paired, "", False)
+        else:
+            UserInterface.writeLine("Good news! There are no expiring products")
+
     def browseProducts(self):
         # keyword = UserInterface.displayForm("Search Product: Please input the product you would like to search: ", [('name', 'string')])
         # here keyword is a list, so the "real" keyword  is keyword[0]
@@ -450,6 +463,8 @@ if __name__ == '__main__':
             s.register()
         elif request == 'L':
             s.login()
+        elif request == 'EX':
+            s.viewExpiringProducts()
         elif request == 'RC':
             s.removeCustomer()
         elif request == 'RP':

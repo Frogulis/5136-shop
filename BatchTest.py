@@ -15,7 +15,7 @@ class BatchTest(unittest.TestCase):
         prev = bs[0].getDiscount()
         for b in bs[1:]:
             a = b.getDiscount()
-            assert a < prev
+            assert a < prev, "{}, {}".format(a, prev)
             prev = a
 
 if __name__ == '__main__':

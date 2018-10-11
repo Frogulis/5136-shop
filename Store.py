@@ -292,6 +292,7 @@ class Store:
             raise Exception("Failed to remove customer.")
 
 
+
 if __name__ == '__main__':
 
 

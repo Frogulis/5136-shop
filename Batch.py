@@ -24,7 +24,7 @@ class Batch:
         return self.batchID
 
     def getDiscount(self):
-        if self.expiryDate - datetime.date.today() > datetime.timedelta(days = 7):
+        if not self.nearExpiry():
             return 1.0
         else:
             return 0.3 + 0.6 * ((self.expiryDate - datetime.date.today()).days / 7)
@@ -37,6 +37,9 @@ class Batch:
 
     def getQuantity(self):
         return self.quantity
+
+    def nearExpiry(self):
+        return not (self.expiryDate - datetime.date.today() > datetime.timedelta(days = 7))
 
     def setActualPrice(self, actualPrice):
         self.actualPrice = float(actualPrice)
