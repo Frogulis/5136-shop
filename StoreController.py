@@ -170,6 +170,58 @@ class StoreController:
         else:
             UserInterface.writeLine("The action is abandoned.")
 
+    def manageAccount(self):
+        customer = self.store.getCustomer(self.loginDetail)
+        name = customer.getName()
+        pwd = customer.getPassword()
+        phoneNumber = customer.getPhoneNumber()
+        address = customer.getAddress()
+        balance = customer.getBalance()
+
+        # option_String = 'Edit Options: 1- Name   2- Password   3- Phone Number   4- Address   5- Balance'
+        # keyboardInput = UserInterface.displayList('Account Info.', [('Name', name), ('Password', pwd), ('Phone', phoneNumber)
+        #                        , ('Address', address), ('Balance', balance)], option_String)
+
+        while True:
+            option_String = 'Edit Options: N- Name   P- Password   C- Phone Number   A- Address   B- Top Up Balance  X- Exit'
+            keyboardInput = UserInterface.displayList('Account Info.',
+                                                      [('Name', name), ('Password', pwd), ('Phone', phoneNumber)
+                                                          , ('Address', address), ('Balance', balance)], option_String).strip().upper()
+            if keyboardInput == 'N':
+                name = UserInterface.displayForm('Please give a new value for -', [('Name', 'nstring')])
+                name = name[0]
+                customer.setName(name)
+                UserInterface.writeLine('Name updated.')
+            elif keyboardInput == 'P':
+                pwd = UserInterface.displayForm('Please give a new value for -', [('Password', 'nstring')])
+                pwd = pwd[0]
+                customer.setPassword(pwd)
+                UserInterface.writeLine('Password updated.')
+            elif keyboardInput == 'C':
+                phoneNumber = UserInterface.displayForm('Please give a new value for -', [('Phone Number', 'nstring')])
+                phoneNumber = phoneNumber[0]
+                customer.setPhoneNumber(phoneNumber)
+                UserInterface.writeLine('Phone number updated.')
+            elif keyboardInput == 'A':
+                address = UserInterface.displayForm('Please give a new value for -', [('Address', 'nstring')])
+                address = address[0]
+                customer.setAddress(address)
+                UserInterface.writeLine('Address updated.')
+            elif keyboardInput == 'B':
+                updated = False
+                while not updated:
+                    balance = UserInterface.displayForm('Please give a new value for -', [('Balance', 'money')])
+                    balance = balance[0]
+                    if float(balance) > 0 and not updated:
+                        customer.topUp(balance)
+                        UserInterface.writeLine('Balance updated.')
+                        updated = True
+                    else:
+                        print('Please enter a value greater than zero.')
+            elif keyboardInput == 'X':
+                self.store.writeStore()
+                break
+
     # can only REDUCE quantity by price, adding will cause trouble
     def reduceProductQuantityByPrice(self, productId, actualPrice):
         totalQ = self.store.getProduct(productId).calculateStock(actualPrice)
@@ -186,7 +238,7 @@ class StoreController:
                 UserInterface.writeLine("The quantity is too much.")
         UserInterface.writeLine("The new quantity is: " + str(self.store.getProduct(productId).calculateStock(actualPrice)))
 
-    #ML
+    # ML
     def login(self):
         inputs = UserInterface.displayForm("Please enter your login details",
                                           [('Customer ID', 'nstring'), ('Password', 'nstring')])
@@ -202,7 +254,7 @@ class StoreController:
         except Exception:
             UserInterface.writeLine("Invalid Customer ID and password combination")
 
-    #ML
+    # ML
     def logout(self):
         # ask for confirm from user
         if self.loginDetail is None:
