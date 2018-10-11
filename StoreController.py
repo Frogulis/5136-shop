@@ -122,7 +122,11 @@ class StoreController:
             else:
                 return request
 
-
+    # default add batch, shelfdate is today
+    def restockProduct(self,productId):
+        quantity = UserInterface.displayForm("Input how much you wanna restock: ", \
+                                               [("restock quantity","number")])
+        self.store.getProduct(productId).addBatch(quantity[0])
 
     def editBatchQuantity(self, productId, batchId):
         currentQuantity = self.store.getProduct(productId).getBatch(batchId).getQuantity()
@@ -139,12 +143,19 @@ class StoreController:
 
     # can only REDUCE quantity by price, adding will cause trouble
     def reduceProductQuantityByPrice(self, productId, actualPrice):
-        UserInterface.writeLine("Current quantity at $" + str(actualPrice) + " is "
-            + str(self.store.getProduct(productId).calculateStock(actualPrice)))
-        results = UserInterface.displayForm("Please enter the new quantity", [('Quantity', 'number')]) #input
-        newQuantity = float(results[0])
-        self.store.getProduct(productId).deductStock(actualPrice,newQuantity)
-        #display new quantity
+        totalQ = self.store.getProduct(productId).calculateStock(actualPrice)
+        UserInterface.writeLine("Current quantity at $" + str(actualPrice) + " is "\
+            + str(totalQ))
+        valid = False
+        while not valid:
+            results = UserInterface.displayForm("Deduct the quantity BY this amount: ", [('Quantity', 'number')]) #input
+            newQuantity = float(results[0])
+            if newQuantity <= totalQ:
+                valid = True
+                self.store.getProduct(productId).deductStock(actualPrice,newQuantity)
+            else:
+                UserInterface.writeLine("The quantity is too much.")
+        UserInterface.writeLine("The new quantity is: " + str(self.store.getProduct(productId).calculateStock(actualPrice)))
 
     #ML
     def login(self):
@@ -422,8 +433,9 @@ class StoreController:
     def editProduct(self, productId):
         attToEdit = True
         while attToEdit is not None:
-            select = UserInterface.displayForm("A. Name  B. Unit C. Source D. Original Price E. Quit", [('select:','string')])
-            if select[0].upper().strip() == 'E':
+            UserInterface.writeLine("A. Name  B. Unit C. Source D. Original Price E. Restock F. Deduct Stock Q. Quit ")
+            select = UserInterface.displayForm("", [('select:','string')])
+            if select[0].upper().strip() == 'Q':
                 attToEdit = None
             else:
                 if select[0].upper().strip() == 'A':
@@ -438,6 +450,13 @@ class StoreController:
                 elif select[0].upper().strip() == 'D':
                     newData = UserInterface.displayForm('input new price:', [('', 'money')])
                     self.store.editProductOriginalPrice(productId, newData[0])
+                elif select[0].upper().strip() == 'E':
+                    self.restockProduct(productId)
+                elif select[0].upper().strip() == 'F':
+                    ap = UserInterface.displayForm("Input the product price to deduct quantity at that price", \
+                                                   [("price point: ", "money")])
+                    self.reduceProductQuantityByPrice(productId,float(ap[0]))
+
                 attToEdit = True
         # view product after quit the edition
         self.viewProductByPrice(productId)

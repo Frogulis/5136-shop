@@ -155,5 +155,5 @@ class Product:
         totalQuantity = 0.0
         for batch in self.batches:
             if batch.actualPrice == price:
-                totalQuantity += batch.quantity
+                totalQuantity += batch.getQuantity()
         return totalQuantity

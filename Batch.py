@@ -9,7 +9,7 @@ class Batch:
         else:
             self.shelfDate = shelfDate
         self.actualPrice = float(actualPrice)
-        self.quantity = quantity
+        self.quantity = float(quantity)
         self.setExpiryDate(shelfLife)
         self.shelfLife = shelfLife
 
