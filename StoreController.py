@@ -20,7 +20,7 @@ class StoreController:
         self.store.writeStore()
         UserInterface.writeLine("Product added.")
 
-    def checkOut(self):
+    def checkOut(self):  # TODO
         currentCustomer = self.store.getCustomer(self.loginDetail)
         shoppingCart = currentCustomer.getShoppingCart()
         totalPrice = shoppingCart.getTotalPrice()
@@ -288,8 +288,9 @@ class StoreController:
         elif self.loginDetail == 'owner':
             # allow owner to edit product
             valid = False
-            while not valid:
-                ganma = UserInterface.displayList("", [("Next Action: ", "A. View by Batch  B. Edit Product  Q. Quit")],"")
+            while not valid:  # TODO
+                UserInterface.writeLine("Next Action: A. View by Batch  B. Edit Product  C. Discount Q. Quit")
+                ganma = UserInterface.displayList("", [],"")
                 if ganma.upper().strip() == "A":
                     self.viewProductByBatch(productId)
                     valid = True
@@ -406,12 +407,19 @@ class StoreController:
     def viewExpiringProducts(self):
         products = self.store.getProducts()
         paired = []
+        expIds = []
         for p in products:
             for b in p.getExpiringBatches():
                 paired.append(("Name: {}, Product ID: {}, Batch ID: {}".format(p.getName(), p.getId(), b.getBatchID()),
                     "Expiring: {}".format(b.getExpiryDate())))
+                if p.getId not in expIds:
+                    expIds.append(p)
         if len(paired) > 0:
             UserInterface.displayList("Expiring product batches", paired, "", False)
+            toDiscount = UserInterface.displayConfirm("Do you wish to discount these products? ", "")
+            if toDiscount in ['y','Y']:
+                for pid in expIds:
+                    self.store.getProduct(pid).updateDiscount()
         else:
             UserInterface.writeLine("Good news! There are no expiring products")
 
@@ -436,23 +444,11 @@ class StoreController:
             else:
                 UserInterface.writeLine("Incorrect product Id")
 
-    # def addCustomer(self):
-    #     UserInterface.displayForm()
-    # def addCustomer(self, password, name, phoneNum, address):
-    # def register(self):
-    #     # requires a lot of inputs
-    #     password = pass
-    #     name = pass
-    #     phoneNum = pass
-    #     address = pass
-    #     self.store.addCustomer(password, name, phoneNum, address)
-
     def removeCustomer(self):
         idlist = self.viewAllCustomerID()
         validInput = False
         while not validInput:
             customerId = input("Please input customer id, x to quit")
-            # productIdInput = UserInterface.displayForm("Id of the product to be removed: ", "please input Id, X to cancel ")
             if customerId in idlist:
                 if self.store.getCustomer(customerId).getBalance() > 0:
                     hasconfirmed = False
