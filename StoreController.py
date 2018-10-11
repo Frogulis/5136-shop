@@ -462,8 +462,8 @@ class StoreController:
             for b in p.getExpiringBatches():
                 paired.append(("Name: {}, Product ID: {}, Batch ID: {}".format(p.getName(), p.getId(), b.getBatchID()),
                     "Expiring: {}".format(b.getExpiryDate())))
-                if p.getId not in expIds:
-                    expIds.append(p)
+                if p.getId() not in expIds:
+                    expIds.append(p.getId())
         if len(paired) > 0:
             UserInterface.displayList("Expiring product batches", paired, "", False)
             toDiscount = UserInterface.displayConfirm("Do you wish to discount these products? ", "")
