@@ -1,4 +1,6 @@
 import datetime
+
+
 class Batch:
     def __init__(self,batchID = "",actualPrice = 0.00,quantity=0.00,shelfDate=None, shelfLife=0):
         self.batchID = batchID
@@ -6,7 +8,7 @@ class Batch:
             self.shelfDate = datetime.date.today()
         else:
             self.shelfDate = shelfDate
-        self.actualPrice = actualPrice
+        self.actualPrice = float(actualPrice)
         self.quantity = quantity
         self.setExpiryDate(shelfLife)
         self.shelfLife = shelfLife
@@ -37,7 +39,7 @@ class Batch:
         return self.quantity
 
     def setActualPrice(self, actualPrice):
-        self.actualPrice = actualPrice
+        self.actualPrice = float(actualPrice)
 
     def setBatchId(self,batchID):
         self.batchID = batchID

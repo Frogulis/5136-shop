@@ -248,19 +248,45 @@ class StoreController:
                 toBeDisplayed.append((newtuple0,newtuple1))
             UserInterface.displayList("The available stocks are: ", toBeDisplayed, "", False)
         # menu of this product
-        further = None
         if self.loginDetail is None:
             pass
         elif self.loginDetail == 'owner':
             # allow owner to edit product
             toEdit = UserInterface.displayConfirm("", "Do you wish to edit this Product?")
-            if toEdit == 'y':
-                self.editProduct(productId)  # TODO
-        else:
+            if toEdit in ['y','Y']:
+                self.editProduct(productId)
+        elif len(priceGroup) > 0:
+            self.addToCart(productId, priceGroup)
             # allow customer to addShoppingCart
-            ToAdd = UserInterface.displayConfirm("", "Do you wish to add this Product into shopping cart?")
-            pass
-        return further
+
+    def addToCart(self, productId, priceGroup):
+        toAdd = UserInterface.displayConfirm("", "Do you wish to add this Product into shopping cart?")
+        if toAdd in ['y', 'Y']:
+            # check input, addto cart
+
+            acPrice, pQuantity = None, None
+            UserInterface.writeLine("input the price you want. enter 9999 to quit.")
+            acPrice = UserInterface.displayForm("select price:", [('', 'money')])[0]
+            acPrice = float(acPrice)
+            while acPrice not in priceGroup and acPrice != 9999:
+                acPrice = UserInterface.displayForm("price not found. select price:", [('', 'money')])[0]
+                acPrice = float(acPrice)
+            if acPrice != 9999:
+                pQuantity = UserInterface.displayForm("input quantity:", [('', 'number')])[0]
+                pQuantity = float(pQuantity)
+                while pQuantity > priceGroup[acPrice] and pQuantity != 9999:
+                    UserInterface.writeLine("quantity larger than stock. input new or 9999 to quit")
+                    pQuantity = UserInterface.displayForm("input new:", [('', 'number')])[0]
+                    pQuantity = float(pQuantity)
+            if acPrice != 9999 and pQuantity != 9999:
+                UserInterface.writeLine("selected price: " + str(acPrice) + " Quantity: " + str(pQuantity))
+                confirmed = UserInterface.displayConfirm("","confirm to add to shopping cart.")
+                if confirmed == 'y':
+                    sc = self.store.getCustomer(self.loginDetail).getShoppingCart()
+                    sc.addToShoppingCart(productId, acPrice, pQuantity)
+                else:
+                    pass
+
 
     # not used in our program
     def viewProduct(self, productId):
@@ -332,28 +358,31 @@ class StoreController:
                 validInput = True
             else:
                 pass
-            
+
+    # yuki
     # modify the edit product so that it only happens after view
     def editProduct(self, productId):
-        attToEdit = None
-        while attToEdit is None:
-            select = UserInterface.displayForm("A. Name  B. Unit C. Source D. Original Price E. Cancel", [('select:','string')])
+        attToEdit = True
+        while attToEdit is not None:
+            select = UserInterface.displayForm("A. Name  B. Unit C. Source D. Original Price E. Quit", [('select:','string')])
             if select[0].upper().strip() == 'E':
                 attToEdit = None
             else:
                 if select[0].upper().strip() == 'A':
-                    newData = UserInterface.displayForm('input:',[('','string')])
+                    newData = UserInterface.displayForm('input new name:',[('','nstring')])
                     self.store.editProductName(productId, newData[0])
                 elif select[0].upper().strip() == 'B':
-                    newData = UserInterface.displayForm('input:',[('','string')])
+                    newData = UserInterface.displayForm('input new unit:',[('','nstring')])
                     self.store.editProductUnit(productId, newData[0])
                 elif select[0].upper().strip() == 'C':
-                    newData = UserInterface.displayForm('input:',[('','string')])
+                    newData = UserInterface.displayForm('input new source:',[('','nstring')])
                     self.store.editProductSource(productId, newData[0])
                 elif select[0].upper().strip() == 'D':
-                    newData = UserInterface.displayForm('input:', [('', 'string')])
+                    newData = UserInterface.displayForm('input new price:', [('', 'money')])
                     self.store.editProductOriginalPrice(productId, newData[0])
                 attToEdit = True
+        # view product after quit the edition
+        self.viewProductByPrice(productId)
 
 
 
