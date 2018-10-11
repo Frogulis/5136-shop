@@ -135,11 +135,13 @@ class Store:
         self.customers.append(newCustomer)
         return newCustomer
 
-    def addOrder(self, customerId, sCart=None, tPrice=0.0, tDate=datetime.datetime.now()):
+    def addOrder(self, customerId, pInSc, tPrice=0.0, tDate=datetime.datetime.now()):
         if customerId not in self.orderHistory:
             self.orderHistory[customerId] = []
         nid = self.generateNewOrderId(customerId)
-        newOrder = Order(nid, customerId, sCart, tPrice, tDate)
+        scRec = ShoppingCart()
+        scRec.setProductsInCart(pInSc)
+        newOrder = Order(nid, customerId, scRec, tPrice, tDate)
         self.orderHistory[customerId].append(newOrder)
         return newOrder
 

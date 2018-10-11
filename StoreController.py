@@ -24,40 +24,48 @@ class StoreController:
         currentCustomer = self.store.getCustomer(self.loginDetail)
         shoppingCart = currentCustomer.getShoppingCart()
         totalPrice = shoppingCart.getTotalPrice()
+        formattedSC = []
+        formattedSC.append(('Index','product name, real price, quantity'))
+        for line in shoppingCart.getProductsInCart():
+            pname = self.store.getProduct(line[0]).getName()
+            newLine = pname + "," + str(line[1]) + "," + str(line[2])
+            formattedSC.append((line[0], newLine))
+        UserInterface.displayList("Current Shopping Cart", formattedSC, '', False)
 
         insufficientP = []
-        for eachProduct in shoppingCart:
+        for eachProduct in shoppingCart.getProductsInCart():
             if not self.checkStock(eachProduct[2], eachProduct[0], eachProduct[1]):
                 insufficientP.append(eachProduct)
-        if len(insufficientP) > 0: # insufficient stock, return to shopping cart or whatever
-            outputP = ""
-            for insufPro in insufficientP:
-                outputP = outputP + insufPro.getName() + " "
-            raise Exception("Please reduce the quantity of " + outputP + ".")
+        if len(insufficientP) > 0:  # insufficient stock, return to shopping cart or whatever
+            return insufficientP
 
         confirmMSG = UserInterface.displayConfirm("You are about to check out. ", "Are you sure?")
         if confirmMSG == 'y' or confirmMSG == 'Y':
-            try:
-                currentCustomer.subtractBalance(totalPrice)
-            except Exception:
-                topUpValue = UserInterface.displayForm("Please enter the amount: ", [('Amount', 'money')])
-                currentCustomer.topUp(topUpValue)
-            for eachProduct in shoppingCart:
-                eachProduct.deductStock(eachProduct[1],eachProduct[2])
-            shoppingCartCopy = shoppingCart[:]
+            if self.store.getCustomer(self.loginDetail).getBalance() < totalPrice:
+                UserInterface.writeLine('You do not have sufficient balance. Please go to manage account and top up.')
+                return None
+            currentCustomer.subtractBalance(totalPrice)
+
+            for eachProduct in shoppingCart.getProductsInCart():
+                self.store.getProduct(eachProduct[0]).deductStock(eachProduct[1], eachProduct[2])
+
+            shoppingCartCopy = shoppingCart.getProductsInCart()[:]
             newOrder = self.store.addOrder(self.loginDetail, shoppingCartCopy, totalPrice)
             #translate order into list of tuples(name, everthing else)
+
             orderId = newOrder.getOrderId() # str
             newShoppingCart = newOrder.getShoppingCart()
             listOfTuples = []
-            for productInCart in newShoppingCart:
+            for productInCart in newShoppingCart.getProductsInCart():
                 name = productInCart[0]
                 rest = str(productInCart[1]) + " " + str(productInCart[2])
                 newTuple = (name, rest)
                 listOfTuples.append(newTuple)
             UserInterface.writeLine(orderId)
-            UserInterface.displayList("The new order details: ", listOfTuples, "OptionString whatever")
+
+            UserInterface.displayList("The new order details: ", listOfTuples, "", False)
             UserInterface.writeLine("The total price is: " + str(newShoppingCart.getTotalPrice()))
+            currentCustomer.getShoppingCart().setProductsInCart([])
         else:
             pass
             # do nothing
@@ -210,7 +218,7 @@ class StoreController:
                 while not updated:
                     balance = UserInterface.displayForm('Please give a new value for -', [('Balance', 'money')])
                     balance = balance[0]
-                    if float(balance) > 0 and not updated:
+                    if float(balance) >= 0 and not updated:
                         customer.topUp(balance)
                         UserInterface.writeLine('Balance updated.')
                         updated = True
@@ -429,6 +437,9 @@ class StoreController:
         UserInterface.displayList("Products in Shopping Cart", listToBeDisplayed, "", False)
         if len(listToBeDisplayed) == 0:
             UserInterface.writeLine('no product yet')
+        co = UserInterface.displayConfirm('Do you wish to check out?','')
+        if co in ['y','Y']:
+            self.checkOut()
         # return something
 
     def viewAllProductID(self):
@@ -612,6 +623,8 @@ if __name__ == '__main__':
             s.register()
         elif request == 'L':
             s.login()
+        elif request == 'M':
+            s.manageAccount()
         elif request == 'EX':
             s.viewExpiringProducts()
         elif request == 'RC':

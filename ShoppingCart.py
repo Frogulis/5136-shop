@@ -13,7 +13,13 @@ class ShoppingCart:
         #self._convertToFloat(actualPrice)
         #self._convertToFloat(quantity)
         newTuple = [productId, round(actualPrice,2), quantity]
-        self.productsInCart.append(newTuple)
+        found = False
+        for existT in self.productsInCart:
+            if newTuple[0] == existT[0] and newTuple[1] == existT[1]:
+                found = True
+                existT[2] += newTuple[2]
+        if not found:
+            self.productsInCart.append(newTuple)
 
     def adjustQuantity(self, productId, actualPrice, newQuantity):
         actualPrice = self._convertToFloat(actualPrice)
