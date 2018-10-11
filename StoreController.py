@@ -303,13 +303,15 @@ class StoreController:
         #print(products[i])
         return products[i]
 
-    def viewShoppingCart(self, customerId):
-        shoppingCart = self.store.getCustomer(customerId).getShoppingCart().getProductsInCart()
+    def viewShoppingCart(self):
+        shoppingCart = self.store.getCustomer(self.loginDetail).getShoppingCart().getProductsInCart()
         listToBeDisplayed = []
         for listhaha in shoppingCart:
             pName = self.store.getProduct(listhaha[0]).getName()
             listToBeDisplayed.append((pName,listhaha[1:]))
         UserInterface.displayList("Products in Shopping Cart", listToBeDisplayed, "", False)
+        if len(listToBeDisplayed) == 0:
+            UserInterface.writeLine('no product yet')
         # return something
 
     def browseProducts(self):
@@ -409,6 +411,7 @@ if __name__ == '__main__':
             s.removeProduct()
         elif request == 'SC':
             #viewshoppingcart
+            s.viewShoppingCart()
             pass
         elif request == 'T':
             s.logout()
