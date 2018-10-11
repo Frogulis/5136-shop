@@ -248,7 +248,8 @@ class Store:
     # All Order History as a whole list
     def getOrderHistoryAsList(self):
         orderHistoryList = []
-        for key in self.orderHistory.keys():
+        sortedKeys = sorted(self.orderHistory.keys())
+        for key in sortedKeys:
             orderHistoryList.extend(self.orderHistory[key])
         return orderHistoryList
 

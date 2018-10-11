@@ -71,24 +71,28 @@ class StoreController:
 
     def displayOrderHistory(self, uid):
         if uid == 'owner':
-            decision = UserInterface.displayItem("Orders to display",
-                [("Customers", "Valid customer numbers are between 1 and {}".format(len(self.store.getCustomers())))],
+            itemised = [(c.getId(), "Name: {}".format(c.getName())) for c in self.store.getCustomers()]
+            decision = UserInterface.displayList("Customers",
+                itemised,
                 "Please enter the number of the customer whose orders you would like to see, or leave blank to see all")
             decision = decision.lower().strip()
             if decision == '':
                 orders = self.store.getOrderHistoryAsList()
             else:
-                if int(decision) < len(self.store.getCustomers()) and int(decision) > 0:
+                if decision in [i[0] for i in itemised]:
                     orders = self.store.getCustomerOrders(decision)
                 else:
                     UserInterface.writeLine("Invalid customer ID")
-                    orders = []
+                    return
         else:
             orders = self.store.getCustomerOrders(uid)
 
-        displayOrders = [("{}:{} -- {}".format(o.getCustomerId(), o.getOrderId(), str(o.transactionDate)),
-            str(o.getShoppingCart()) + str(o.getTotalPrice())) for o in orders]
-        UserInterface.displayList("Orders", displayOrders, "Please press enter to return")
+        if len(orders) > 0:
+            displayOrders = [("{}:{} -- {}".format(o.getCustomerId(), o.getOrderId(), str(o.transactionDate)),
+                str(o.getShoppingCart()) + str(o.getTotalPrice())) for o in orders]
+            UserInterface.displayList("Orders", displayOrders, "", False)
+        else:
+            UserInterface.writeLine("No orders to display for customer {}".format(decision))
 
     def displayMenuReturnOption(self):
         while True:
