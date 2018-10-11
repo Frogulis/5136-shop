@@ -112,6 +112,7 @@ class StoreController:
                     menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
                 else:
                     menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
+                    menuItems['UR'] = ('Unregister Account', 'Enter UR to unregister your account')
                     menuItems['SC'] = ('View Shopping Cart', 'Enter SC to view shopping cart')
             menuItems['X'] = ("Exit", 'Enter X to exit')
             request = UserInterface.displayList("Monash Fruit and Vegetable Store",
@@ -286,6 +287,7 @@ class StoreController:
         UserInterface.displayList("Batch details: ", tuples, "", False)
         confirm = UserInterface.displayConfirm("Edit batch ","Do you wish to edit Batch?")
         if confirm.lower() == 'y':
+            pass
             #editBatch
 
     def addToCart(self, productId, priceGroup):
@@ -436,6 +438,25 @@ class StoreController:
             else:
                 pass
 
+    def unregisterSelf(self):
+        confirm = UserInterface.displayConfirm("Please confirm", "This action will remove your account. Are you sure?")
+        if confirm == 'y':
+            if self.store.getCustomer(self.loginDetail).getBalance() > 0:
+                c2 = UserInterface.displayConfirm("Balance remaining", "You still have balance remaining. Are you sure you want to unregister?")
+                if c2 == 'y':
+                    self.store.removeCustomer(self.loginDetail)
+                    self.loginDetail = None
+                    UserInterface.writeLine("Your account has been logged out and unregisted. Thanks for shopping with us!")
+                    return
+            else:
+                self.store.removeCustomer(self.loginDetail)
+                self.loginDetail = None
+                UserInterface.writeLine("Your account has been logged out and unregisted. Thanks for shopping with us!")
+                return
+
+        UserInterface.writeLine("Cancelled.")
+
+
     def removeProduct(self):
         idlist = self.viewAllProductID()
         validInput = False
@@ -517,6 +538,8 @@ if __name__ == '__main__':
             pass
         elif request == 'T':
             s.logout()
+        elif request == 'UR':
+            s.unregisterSelf()
         elif request == 'X':
             s.store.writeStore()
             exit()
