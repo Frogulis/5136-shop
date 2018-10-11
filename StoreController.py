@@ -128,11 +128,37 @@ class StoreController:
                                                [("restock quantity","number")])
         self.store.getProduct(productId).addBatch(quantity[0])
 
+    def editBatch(self,productId, batchId):
+        valid = False
+        while not valid:
+            choice = UserInterface.displayList("Edit options",[],"A. Edit Batch Price  B. Edit Batch Quantity  Q. Quit")
+            if choice.upper() == 'A':
+                self.editBatchPrice(productId,batchId)
+                valid = True
+            elif choice.upper() == 'B':
+                self.editBatchQuantity(productId,batchId)
+                valid = True
+            elif choice.upper() == 'Q':
+                valid = True
+            else:
+                UserInterface.writeLine("Invalid input.")
+
+    def editBatchPrice(self, productId, batchId):
+        currentPrice = self.store.getProduct(productId).getBatch(batchId).getActualPrice()
+        UserInterface.writeLine("The current quantity is " + str(currentPrice))
+        results = UserInterface.displayForm("Please enter the new price", [('Price', 'money')]) #input
+        newPrice = float(results[0])
+        confirmMsg = UserInterface.displayConfirm("Your new price is " + results[0], "Are you sure?")
+        if confirmMsg == 'y' or confirmMsg == 'Y':
+            self.store.getProduct(productId).getBatch(batchId).setActualPrice(newPrice)
+            UserInterface.writeLine("The new price is: " + str(newPrice))
+        else:
+            UserInterface.writeLine("The action is abandoned.")
+
     def editBatchQuantity(self, productId, batchId):
         currentQuantity = self.store.getProduct(productId).getBatch(batchId).getQuantity()
         UserInterface.writeLine("The current quantity is " + str(currentQuantity))
         results = UserInterface.displayForm("Please enter the new quantity", [('Quantity', 'number')]) #input
-
         newQuantity = float(results[0])
         confirmMsg = UserInterface.displayConfirm("Your new quantity is " + results[0], "Are you sure?")
         if confirmMsg == 'y' or confirmMsg == 'Y':
@@ -262,7 +288,7 @@ class StoreController:
             while not valid:
                 ganma = UserInterface.displayList("", [("Next Action: ", "A. View by Batch  B. Edit Product  Q. Quit")],"")
                 if ganma.upper().strip() == "A":
-                    pass
+                    self.viewProductByBatch(productId)
                     valid = True
                 elif ganma.upper().strip() == "B":
                     self.editProduct(productId)
@@ -279,14 +305,22 @@ class StoreController:
         product = self.store.getProduct(productId)
         batches = product.getBatches()
         tuples = [("BatchId","Price, Quantity, Expiry Date")]
+        batchIds = []
         for batch in batches:
             batchId = batch.getBatchID()
+            batchIds.append(batchId)
             theRest = str(batch.getActualPrice()) + " " + str(batch.getQuantity()) + " " + str(batch.getExpiryDate())
             tuples.append((batchId,theRest))
         UserInterface.displayList("Batch details: ", tuples, "", False)
         confirm = UserInterface.displayConfirm("Edit batch ","Do you wish to edit Batch?")
         if confirm.lower() == 'y':
-            #editBatch
+            while True:
+                batchId = UserInterface.displayForm("Batch Id",[("Please input the batchID you would like to edit.","number")])[0]
+                if batchId in batchIds:
+                    self.editBatch(productId,batchId)
+                    break
+                else:
+                    UserInterface.writeLine("Batch Id incorrect. Try again.")
 
     def addToCart(self, productId, priceGroup):
         toAdd = UserInterface.displayConfirm("", "Do you wish to add this Product into shopping cart?")
