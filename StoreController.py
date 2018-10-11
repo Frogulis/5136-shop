@@ -416,20 +416,25 @@ class StoreController:
             UserInterface.writeLine("Good news! There are no expiring products")
 
     def browseProducts(self):
-        # keyword = UserInterface.displayForm("Search Product: Please input the product you would like to search: ", [('name', 'string')])
-        # here keyword is a list, so the "real" keyword  is keyword[0]
-
         matchingList = self.store.getProducts()
-        toBeDisplayed =[]
-        displayNumber = 0
+        toBeDisplayed =[("Product Id", ("Name, Unit, Source"))]
+        ids = []
         for matchingProduct in matchingList:
-            tuple0 = displayNumber
+            tuple0 = matchingProduct.getId()
+            ids.append(tuple0)
             theRest = matchingProduct.getName() + " " + matchingProduct.getUnit() + " " + matchingProduct.getSource()
             newTuple = (tuple0, theRest)
             toBeDisplayed.append(newTuple)
-            displayNumber += 1
-        UserInterface.displayList("The matching products are: ", toBeDisplayed, "", False)
-
+        UserInterface.displayList("The products are: ", toBeDisplayed, "", False)
+        while True:
+            choice = UserInterface.displayList("View Product? ", [], "Input the product id to view details, Q to quit.")
+            if choice.upper() == "Q":
+                break
+            elif choice in ids:
+                self.viewProductByPrice(choice)
+                break
+            else:
+                UserInterface.writeLine("Incorrect product Id")
 
     # def addCustomer(self):
     #     UserInterface.displayForm()
