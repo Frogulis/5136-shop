@@ -258,12 +258,35 @@ class StoreController:
             pass
         elif self.loginDetail == 'owner':
             # allow owner to edit product
-            toEdit = UserInterface.displayConfirm("", "Do you wish to edit this Product?")
-            if toEdit in ['y','Y']:
-                self.editProduct(productId)
+            valid = False
+            while not valid:
+                ganma = UserInterface.displayList("", [("Next Action: ", "A. View by Batch  B. Edit Product  Q. Quit")],"")
+                if ganma.upper().strip() == "A":
+                    pass
+                    valid = True
+                elif ganma.upper().strip() == "B":
+                    self.editProduct(productId)
+                    valid = True
+                elif ganma.upper().strip() == "Q":
+                    valid = True
+                else:
+                    UserInterface.writeLine("Invalid input, try again")
         elif len(priceGroup) > 0:
             self.addToCart(productId, priceGroup)
             # allow customer to addShoppingCart
+
+    def viewProductByBatch(self, productId):
+        product = self.store.getProduct(productId)
+        batches = product.getBatches()
+        tuples = [("BatchId","Price, Quantity, Expiry Date")]
+        for batch in batches:
+            batchId = batch.getBatchID()
+            theRest = str(batch.getActualPrice()) + " " + str(batch.getQuantity()) + " " + str(batch.getExpiryDate())
+            tuples.append((batchId,theRest))
+        UserInterface.displayList("Batch details: ", tuples, "", False)
+        confirm = UserInterface.displayConfirm("Edit batch ","Do you wish to edit Batch?")
+        if confirm.lower() == 'y':
+            #editBatch
 
     def addToCart(self, productId, priceGroup):
         toAdd = UserInterface.displayConfirm("", "Do you wish to add this Product into shopping cart?")
