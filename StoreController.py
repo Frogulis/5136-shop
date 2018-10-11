@@ -375,7 +375,8 @@ class StoreController:
         confirm = UserInterface.displayConfirm("Edit batch ","Do you wish to edit Batch?")
         if confirm.lower() == 'y':
             while True:
-                batchId = UserInterface.displayForm("Batch Id",[("Please input the batchID you would like to edit.","number")])[0]
+                batchId = UserInterface.displayForm("Batch Id", [("Please input the batchID you would like to edit.","number")])[0]
+                print(batchIds)
                 if batchId in batchIds:
                     self.editBatch(productId,batchId)
                     break
@@ -410,22 +411,6 @@ class StoreController:
                 else:
                     pass
 
-
-    # not used in our program
-    def viewProduct(self, productId):
-        products = Store.getProducts()
-        # products = [['20001', 'Apple (kg) bag', 'ea'], ['20002', 'Green apple', 'kg']
-            #, ['20003', 'Dutch carrots', 'ea'], ['20004', 'Watermelon', 'ea'], ['20005', 'Rock Melon', 'ea']]
-        i = 0
-        found = False
-        while found == False:
-            if products[i][0] != productId:
-                i += 1
-            else:
-                found = True
-        #print(products[i])
-        return products[i]
-
     def viewShoppingCart(self):
         shoppingCart = self.store.getCustomer(self.loginDetail).getShoppingCart().getProductsInCart()
         listToBeDisplayed = []
@@ -437,8 +422,13 @@ class StoreController:
             UserInterface.writeLine('no product yet')
         co = UserInterface.displayConfirm('Do you wish to check out?','')
         if co in ['y','Y']:
-            self.checkOut()
-        # return something
+            insufficientProduct = self.checkOut()
+            if insufficientProduct != None:
+                print(insufficientProduct)  # TODO
+        co = UserInterface.displayConfirm('Do you wish to modify shopping cart?','')
+        if co in ['y','Y']:
+            print('modify                      sc')
+                    
 
     def viewAllProductID(self):
         toBeDisplayed = []
@@ -632,7 +622,6 @@ if __name__ == '__main__':
         elif request == 'SC':
             #viewshoppingcart
             s.viewShoppingCart()
-            pass
         elif request == 'T':
             s.logout()
         elif request == 'UR':
