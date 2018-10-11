@@ -488,17 +488,6 @@ class StoreController:
             else:
                 UserInterface.writeLine("Incorrect product Id")
 
-    # def addCustomer(self):
-    #     UserInterface.displayForm()
-    # def addCustomer(self, password, name, phoneNum, address):
-    # def register(self):
-    #     # requires a lot of inputs
-    #     password = pass
-    #     name = pass
-    #     phoneNum = pass
-    #     address = pass
-    #     self.store.addCustomer(password, name, phoneNum, address)
-
     def removeCustomer(self):
         idlist = self.viewAllCustomerID()
         validInput = False
