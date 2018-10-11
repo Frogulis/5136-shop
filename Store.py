@@ -6,6 +6,7 @@ from ShoppingCart import ShoppingCart
 
 import datetime
 import json
+from pathlib import Path
 
 
 class Store:
@@ -15,7 +16,10 @@ class Store:
         self.customers = []
         self.owner = OwnerAccount('owner', 'owner', 'owner')
         self.orderHistory = {}
-        self.readStore()
+        if Path("testbyyuki.json").is_file():
+            print('database exist')
+            self.readStore()
+        else: print('database not exist')
 
     def readStore(self):  # yuki
         with open('testbyyuki.json','r') as infile:
@@ -288,29 +292,11 @@ class Store:
 
 
 if __name__ == '__main__':
-    # there are some issue with the batchIdCounter. for every batch i build, the Id was always '1'
+
+
     s = Store()
-
-    #s.getProduct('1').addBatch(10)
-    #s.getProduct('1').deductStock(5,14)
-
-    for p in s.products:
-        print(' pid', p.getId())
-        for batch in p.getBatches():
-            print('bid', batch.getBatchID(), 'acPrice', batch.getActualPrice(), 'quantity', batch.getQuantity())
-    for c in s.customers:
-        print('id', c.getId())
-        print('ShoppingCart', c.getShoppingCart().productsInCart)
-
-    for cid in s.orderHistory:
-        for order in s.orderHistory[cid]:
-            print(order.getTotalPrice())
-            print(order.getTransactionDate())
-    s.writeStore()
-
 
     """
-    s = Store()
     s.addCustomer('cs1','cs1','0450563312','add1')
     s.addCustomer('cs2','cs2','0450563312','add1')
     s.addCustomer('cs3','cs3','0450563312','add1')
@@ -340,21 +326,29 @@ if __name__ == '__main__':
     #c2sc = s.getCustomer('2').getShoppingCart()
     s.addOrder('2', c2sc, c2sc.getTotalPrice())
 
-    s.writeStore()
-"""
-    # put parameters to create Store object
-    """
+
     products = ["Apple", "Banana", "Orange"]
     customers = ["C1000", "C1001", "C1002", "C1003"]
     owner = "O1500"
     orderHistory = [{"C1000": "Order1"}, {"C1002": "Order2"}]
-    """
-    # create object
-    # c = Store(products, customers, owner, orderHistory)
-    """
-    s=Store()
+
+
     s.addProduct('apple', 'bag', 2.5, 'china', 9)
     print(1, s.getProducts()[0].getId())
     s.editProductName('1', 'banana')
     s.editProductOriginalPrice('1','er')
-    """
+
+"""
+    for p in s.products:
+        print(' pid', p.getId())
+        for batch in p.getBatches():
+            print('bid', batch.getBatchID(), 'acPrice', batch.getActualPrice(), 'quantity', batch.getQuantity())
+    for c in s.customers:
+        print('id', c.getId())
+        print('ShoppingCart', c.getShoppingCart().productsInCart)
+
+    for cid in s.orderHistory:
+        for order in s.orderHistory[cid]:
+            print(order.getTotalPrice())
+            print(order.getTransactionDate())
+    #s.writeStore()
