@@ -39,7 +39,8 @@ class CustomerAccount(UserAccount.UserAccount):
         self.shoppingCart = newShoppingCart
 
     def topUp(self, enteredAmount):
-        self.balance += round(enteredAmount, 2)
+        self.balance += round(float(enteredAmount), 2)
+        return self.balance
 
     def subtractBalance(self, subtractAmount):
         if self.balance - subtractAmount >= 0:
