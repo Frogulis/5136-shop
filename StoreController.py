@@ -103,7 +103,7 @@ class StoreController:
                 menuItems['T'] = ('Logout', 'Enter T to logout')
                 if self.loginDetail == 'owner':
                     menuItems['A'] = ('Add Product', 'Enter A to add a product')
-                    menuItems['C'] = ('Remove Customer', 'Enter C to remove a customer')
+                    menuItems['RC'] = ('Remove Customer', 'Enter RC to remove a customer')
                     menuItems['RP'] = ('Remove Product', 'Enter RP to remove a product')
                 else:
                     menuItems['M'] = ('Manage Account', 'Enter M to manage your account')
@@ -117,16 +117,6 @@ class StoreController:
             else:
                 return request
 
-    def viewAllProductID(self):
-        toBeDisplayed = []
-        productIds = []
-        for product in self.store.getProducts():
-            id = product.getId()
-            nameUnitSource = product.getName() + " " + product.getUnit() + " " + product.getSource()
-            toBeDisplayed.append((id, nameUnitSource))
-            productIds.append(id)
-        UserInterface.displayList("All product and their IDs: ", toBeDisplayed, "", False)
-        return productIds
 
 
     def editBatchQuantity(self, productId, batchId):
@@ -314,6 +304,29 @@ class StoreController:
             UserInterface.writeLine('no product yet')
         # return something
 
+    def viewAllProductID(self):
+        toBeDisplayed = []
+        productIds = []
+        for product in self.store.getProducts():
+            id = product.getId()
+            nameUnitSource = product.getName() + " " + product.getUnit() + " " + product.getSource()
+            toBeDisplayed.append((id, nameUnitSource))
+            productIds.append(id)
+        UserInterface.displayList("All product and their IDs: ", toBeDisplayed, "", False)
+        return productIds
+
+    def viewAllCustomerID(self):
+        toBeDisplayed = []
+        customerIds = []
+        for customer in self.store.getCustomers():
+            id = customer.getId()
+            namePhoneAddressBalance = str(customer.getPhoneNumber()) + " " + \
+                customer.getAddress() + " " + str(customer.getBalance())
+            toBeDisplayed.append((id,namePhoneAddressBalance))
+            customerIds.append(id)
+        UserInterface.displayList("All customers and their IDs: ", toBeDisplayed, "", False)
+        return customerIds
+
     def browseProducts(self):
         # keyword = UserInterface.displayForm("Search Product: Please input the product you would like to search: ", [('name', 'string')])
         # here keyword is a list, so the "real" keyword  is keyword[0]
@@ -330,8 +343,8 @@ class StoreController:
         UserInterface.displayList("The matching products are: ", toBeDisplayed, "", False)
 
 
-
-
+    # def addCustomer(self):
+    #     UserInterface.displayForm()
     # def addCustomer(self, password, name, phoneNum, address):
     # def register(self):
     #     # requires a lot of inputs
@@ -341,10 +354,36 @@ class StoreController:
     #     address = pass
     #     self.store.addCustomer(password, name, phoneNum, address)
 
-    def removeCustomer(self, customerId):
-        # display customer details
-        # prompt confirmation
-        self.store.removeCustomer(customerId)
+    def removeCustomer(self):
+        idlist = self.viewAllCustomerID()
+        validInput = False
+        while not validInput:
+            customerId = input("Please input customer id, x to quit")
+            # productIdInput = UserInterface.displayForm("Id of the product to be removed: ", "please input Id, X to cancel ")
+            if customerId in idlist:
+                if self.store.getCustomer(customerId).getBalance() > 0:
+                    hasconfirmed = False
+                    while not hasconfirmed:
+                        confirm = UserInterface.displayConfirm("The customer still has some balance, are you sure? ","y or n ")
+                        if confirm.lower() == 'y':
+                            self.store.removeCustomer(customerId)
+                            UserInterface.writeLine("Customer removed.")
+                            validInput = True
+                            hasconfirmed = True
+                        elif confirm.lower() == 'n':
+                            UserInterface.writeLine("Cancelled.")
+                            hasconfirmed = True
+                            validInput = True
+                        else:
+                            UserInterface.writeLine("Invalid input.")
+                else:
+                    self.store.removeCustomer(customerId)
+                    UserInterface.writeLine("Customer removed.")
+                    validInput = True
+            elif customerId.upper() == "X":
+                validInput = True
+            else:
+                pass
 
     def removeProduct(self):
         idlist = self.viewAllProductID()
@@ -407,6 +446,8 @@ if __name__ == '__main__':
             s.register()
         elif request == 'L':
             s.login()
+        elif request == 'RC':
+            s.removeCustomer()
         elif request == 'RP':
             s.removeProduct()
         elif request == 'SC':
