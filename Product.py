@@ -84,7 +84,7 @@ class Product:
 
     def generateBatchId(self):
         if len(self.batches) == 0:
-            newBatchId = 1
+            newBatchId = str(1)
         else:
             newBatchId = str(int(self.batches[-1].getBatchID())+1)
         return newBatchId
@@ -116,13 +116,14 @@ class Product:
     def getBatches(self):
         return self.batches
 
+    def getExpiringBatches(self):
+        return [batch for batch in self.batches if batch.nearExpiry()]
+
     def getPriceGroups(self):
-        groups = {} #price: [batches]
+        groups = {} #price: quantity
         for batch in self.batches:
-            if batch.getActualPrice() in groups:
-                groups[batch.getActualPrice()].append(batch)
-            else:
-                groups[batch.getActualPrice()] = [batch]
+            if batch.getActualPrice() not in groups:
+                groups[batch.getActualPrice()] = self.calculateStock(batch.getActualPrice())
         return groups
 
     def calculateTotalQuantity(self):
@@ -154,5 +155,5 @@ class Product:
         totalQuantity = 0.0
         for batch in self.batches:
             if batch.actualPrice == price:
-                totalQuantity += batch.quantity
+                totalQuantity += batch.getQuantity()
         return totalQuantity

@@ -73,7 +73,7 @@ class UserInterface:
         i = input('y/n or blank to cancel: ')
         while i.lower().strip() not in ['y', 'n', '']:
             i = input("Please enter 'y', 'n' or nothing")
-        return i
+        return i.lower().strip()
 
     @classmethod
     def displayItem(c, title, list_items, option_string,  requestInput=True, aux=None):
@@ -87,7 +87,7 @@ class UserInterface:
         inputs = []
         for item in fields:
             c._printWhitespace(item[0], 2)
-            inputs.append(input())
+            inputs.append(c.tryInput(item))
         if aux is not None:
             c._printWhitespace(aux, 2)
         return inputs
@@ -166,3 +166,5 @@ eeeeeery long tiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiitle"
             'Are you sure you\'d like to proceed?'))
     else:
         print("invalid choice")
+
+

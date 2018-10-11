@@ -72,8 +72,6 @@ class Store:
 
         ownerData = savedStore['owner']
         self.owner = OwnerAccount(ownerData['id'], ownerData['name'], ownerData['password'])
-        # ML
-        self.products = savedStore['products']
 
     def writeStore(self):  # yuki
         currStore = {'products': [],
@@ -250,7 +248,8 @@ class Store:
     # All Order History as a whole list
     def getOrderHistoryAsList(self):
         orderHistoryList = []
-        for key in self.orderHistory.keys():
+        sortedKeys = sorted(self.orderHistory.keys())
+        for key in sortedKeys:
             orderHistoryList.extend(self.orderHistory[key])
         return orderHistoryList
 
@@ -291,6 +290,7 @@ class Store:
             del self.customers[customerIndex]
         except Exception:
             raise Exception("Failed to remove customer.")
+
 
 
 if __name__ == '__main__':
