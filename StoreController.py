@@ -70,6 +70,7 @@ class StoreController:
         return False
 
     def displayOrderHistory(self, uid):
+        decision = ''
         if uid == 'owner':
             itemised = [(c.getId(), "Name: {}".format(c.getName())) for c in self.store.getCustomers()]
             decision = UserInterface.displayList("Customers",
@@ -85,6 +86,7 @@ class StoreController:
                     UserInterface.writeLine("Invalid customer ID")
                     return
         else:
+            decision = uid
             orders = self.store.getCustomerOrders(uid)
 
         if len(orders) > 0:
