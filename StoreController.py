@@ -172,21 +172,19 @@ class StoreController:
 
     def manageAccount(self):
         customer = self.store.getCustomer(self.loginDetail)
-        name = customer.getName()
-        pwd = customer.getPassword()
-        phoneNumber = customer.getPhoneNumber()
-        address = customer.getAddress()
-        balance = customer.getBalance()
-
-        # option_String = 'Edit Options: 1- Name   2- Password   3- Phone Number   4- Address   5- Balance'
+                # option_String = 'Edit Options: 1- Name   2- Password   3- Phone Number   4- Address   5- Balance'
         # keyboardInput = UserInterface.displayList('Account Info.', [('Name', name), ('Password', pwd), ('Phone', phoneNumber)
         #                        , ('Address', address), ('Balance', balance)], option_String)
 
         while True:
             option_String = 'Edit Options: N- Name   P- Password   C- Phone Number   A- Address   B- Top Up Balance  X- Exit'
             keyboardInput = UserInterface.displayList('Account Info.',
-                                                      [('Name', name), ('Password', pwd), ('Phone', phoneNumber)
-                                                          , ('Address', address), ('Balance', balance)], option_String).strip().upper()
+                                                      [('Name', customer.getName()),
+                                                       ('Password', customer.getPassword()),
+                                                       ('Phone', customer.getPhoneNumber()),
+                                                       ('Address', customer.getAddress()),
+                                                       ('Balance', customer.getBalance())], option_String).strip().upper()
+            print("current balance: " , customer.getBalance())
             if keyboardInput == 'N':
                 name = UserInterface.displayForm('Please give a new value for -', [('Name', 'nstring')])
                 name = name[0]
@@ -210,17 +208,19 @@ class StoreController:
             elif keyboardInput == 'B':
                 updated = False
                 while not updated:
-                    balance = UserInterface.displayForm('Please give a new value for -', [('Balance', 'money')])
-                    balance = balance[0]
-                    if float(balance) > 0 and not updated:
+                    balance = UserInterface.displayForm('Please give a new value for -', [('Balance', 'money')])[0]
+                    if float(balance) > 0:
                         customer.topUp(balance)
                         UserInterface.writeLine('Balance updated.')
                         updated = True
+
                     else:
                         print('Please enter a value greater than zero.')
             elif keyboardInput == 'X':
                 self.store.writeStore()
                 break
+            else:
+                UserInterface.writeLine("Invalid menu option.")
 
     # can only REDUCE quantity by price, adding will cause trouble
     def reduceProductQuantityByPrice(self, productId, actualPrice):
@@ -632,6 +632,8 @@ if __name__ == '__main__':
             s.logout()
         elif request == 'UR':
             s.unregisterSelf()
+        elif request == "M":
+            s.manageAccount()
         elif request == 'X':
             s.store.writeStore()
             exit()
