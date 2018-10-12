@@ -38,16 +38,9 @@ class ShoppingCart:
             raise Exception("Parameter should be a float or integer.")
         return floated
 
-    # def deleteFromShoppingCart(self, itemToBeDeleted):
-    #    for i in range(len(self.productsInCart)):
-    #        if self.productsInCart[i] == itemToBeDeleted:
-    #            del self.productsInCart[i]
-
-    # def deleteFromShoppingCart(self, productId, actualPrice = 0.00):
-    #    actualPrice = self._convertToFloat(actualPrice)
     def deleteFromShoppingCart(self, productId, actualPrice):
         found = False
-        for i in range(len(self.productsInCart) - 1):
+        for i in range(len(self.productsInCart)):
             item = self.productsInCart[i]
             if item[0] == productId and item[1] == actualPrice:
                 del self.productsInCart[i]
@@ -61,6 +54,13 @@ class ShoppingCart:
             if productId == item[0]:
                 return item
         raise Exception("Product Id is invalid.")
+
+    def getListByIdPrice(self, productId, price):
+        for item in self.productsInCart:
+            if productId == item[0] and price == item[1]:
+                return item
+        return None
+
 
     def getProductsInCart(self):
         return self.productsInCart

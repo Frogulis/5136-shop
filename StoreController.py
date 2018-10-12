@@ -214,14 +214,13 @@ class StoreController:
             elif keyboardInput == 'B':
                 updated = False
                 while not updated:
-                    balance = UserInterface.displayForm('Please give a new value for -', [('Balance', 'money')])
-                    balance = balance[0]
-                    if float(balance) >= 0 and not updated:
+                    balance = UserInterface.displayForm('Please give a new value for -', [('Balance', 'money')])[0]
+                    if float(balance) >= 0:
                         customer.topUp(balance)
                         UserInterface.writeLine('Balance updated.')
                         updated = True
                     else:
-                        print('Please enter a value greater than zero.')
+                        print('Please enter a value greater or equal than zero.')
             elif keyboardInput == 'X':
                 self.store.writeStore()
                 break
@@ -343,14 +342,17 @@ class StoreController:
         elif self.loginDetail == 'owner':
             # allow owner to edit product
             valid = False
-            while not valid:  # TODO
-                UserInterface.writeLine("Next Action: A. View by Batch  B. Edit Product  C. Discount Q. Quit")
+            while not valid:
+                UserInterface.writeLine("Next Action: A. View by Batch  B. Edit Product  C. Discount this product Q. Quit")
                 ganma = UserInterface.displayList("", [],"")
                 if ganma.upper().strip() == "A":
                     self.viewProductByBatch(productId)
                     valid = True
                 elif ganma.upper().strip() == "B":
                     self.editProduct(productId)
+                    valid = True
+                elif ganma.upper().strip() == "C":
+                    self.store.getProduct(productId).updateDiscount()
                     valid = True
                 elif ganma.upper().strip() == "Q":
                     valid = True
@@ -415,20 +417,58 @@ class StoreController:
         listToBeDisplayed = []
         for listhaha in shoppingCart:
             pName = self.store.getProduct(listhaha[0]).getName()
-            listToBeDisplayed.append((pName,listhaha[1:]))
+            theRest = [pName]
+            theRest.extend(listhaha[1:])
+            listToBeDisplayed.append((listhaha[0],theRest))
         UserInterface.displayList("Products in Shopping Cart", listToBeDisplayed, "", False)
         if len(listToBeDisplayed) == 0:
             UserInterface.writeLine('no product yet')
         else:
-            co = UserInterface.displayConfirm('Do you wish to check out?','')
-            if co in ['y','Y']:
-                insufficientProduct = self.checkOut()
-                if insufficientProduct != None:
-                    print(insufficientProduct)  # TODO
-                    co = UserInterface.displayConfirm('Do you wish to modify shopping cart?','')
-                    if co in ['y','Y']:
-                        print('modify                      sc')
+            while True:
+                co = UserInterface.displayList('Next action: ',[],'A to check out. B to modify shopping cart Q to quit')
+                if co.upper().strip() == 'A':
+                    insufficientProduct = self.checkOut()
+                    if insufficientProduct != None:
+                        for plist in insufficientProduct:
+                            proid = plist[0]
+                            pro = self.store.getProduct(proid)
+                            proName = pro.getName()
+                            print("Available stock: ",proName, [plist[1], pro.calculateStock(plist[1])])
+                            print("In shopping cart: ",proName, plist[1:])
+                        co = UserInterface.displayConfirm('Do you wish to modify shopping cart?','')
+                        if co in ['y','Y']:
+                            self.modifyShoppingCart()
+                    break
+                elif co.upper().strip() == 'B':
+                    self.modifyShoppingCart()
+                    break
+                elif co.upper().strip() == 'Q':
+                    break
+                else:
+                    UserInterface.writeLine("Incorrect menu option, try again.")
 
+    def modifyShoppingCart(self):
+        while True:
+            choice = UserInterface.displayConfirm("Continue? ", "")
+            if choice.upper().strip() == 'Y':
+                idPrice = UserInterface.displayForm("Please input the product ",[("id","nstring"),("price","money")])
+                sc = self.store.getCustomer(self.loginDetail).getShoppingCart()
+                # print(idPrice[0])
+                acStock = sc.getListByIdPrice(idPrice[0], float(idPrice[1]))
+                print(type(idPrice[0]))
+                if acStock is not None:
+                    newQuan = UserInterface.displayForm("New quantity",[("","money")])[0]
+                    print(type(newQuan), float(newQuan))
+                    if float(newQuan) == 0.0:
+                        sc.deleteFromShoppingCart(idPrice[0],float(idPrice[1]))
+                        UserInterface.writeLine("Item deleted from shopping Cart. :\'(")
+                    else:
+                        acStock[2] = float(newQuan)
+                    break
+                else:
+                    UserInterface.writeLine("Try again. Id and price does not match.")
+            else:
+                break
 
     def viewAllProductID(self):
         toBeDisplayed = []

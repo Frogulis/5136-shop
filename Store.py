@@ -16,11 +16,11 @@ class Store:
         self.customers = []
         self.owner = OwnerAccount('owner', 'owner', 'owner')
         self.orderHistory = {}
-        if Path("testbyyuki.json").is_file():
+        if Path("database.json").is_file():
             self.readStore()
 
     def readStore(self):  # yuki
-        with open('testbyyuki.json','r') as infile:
+        with open('database.json','r') as infile:
             savedStore = json.loads(infile.read())
         for productData in savedStore['products']:
             productId = productData['id']
@@ -119,7 +119,7 @@ class Store:
                 ordersOfCustomer.append(orderData)
             currStore['orderHistory'][customerId] = ordersOfCustomer
         # write currstore into json
-        with open('testbyyuki.json','w') as outfile:
+        with open('database.json','w') as outfile:
             json.dump(currStore, outfile)
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
