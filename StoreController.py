@@ -374,7 +374,7 @@ class StoreController:
             tuples.append((batchId,theRest))
         UserInterface.displayList("Batch details: ", tuples, "", False)
         confirm = UserInterface.displayConfirm("Edit batch ","Do you wish to edit Batch?")
-        if confirm.lower() == 'y':
+        if confirm.lower() == 'y' and len(batchIds) > 0:
             while True:
                 batchId = UserInterface.displayForm("Batch Id", [("Please input the batchID you would like to edit.","number")])[0]
                 print(batchIds)
@@ -383,6 +383,8 @@ class StoreController:
                     break
                 else:
                     UserInterface.writeLine("Batch Id incorrect. Try again.")
+        else:       # ML added else condition so user doesn't get stuck when no batch exists.
+            UserInterface.writeLine("No batches to edit.")
 
     def addToCart(self, productId, priceGroup):
         toAdd = UserInterface.displayConfirm("", "Do you wish to add this Product into shopping cart?")
