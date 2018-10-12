@@ -135,7 +135,7 @@ class StoreController:
     def restockProduct(self,productId):
         quantity = UserInterface.displayForm("Input how much you wanna restock: ", \
                                                [("restock quantity","number")])
-        self.store.getProduct(productId).addBatch(int(quantity[0]))
+        self.store.getProduct(productId).addBatch(float(quantity[0]))
 
     def editBatch(self,productId, batchId):
         valid = False
