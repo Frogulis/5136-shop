@@ -18,7 +18,7 @@ class StoreController:
         self.store.writeStore()
         UserInterface.writeLine("Product added.")
 
-    def checkOut(self):  # TODO
+    def checkOut(self):
         currentCustomer = self.store.getCustomer(self.loginDetail)
         shoppingCart = currentCustomer.getShoppingCart()
         totalPrice = shoppingCart.getTotalPrice()
