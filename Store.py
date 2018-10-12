@@ -17,9 +17,7 @@ class Store:
         self.owner = OwnerAccount('owner', 'owner', 'owner')
         self.orderHistory = {}
         if Path("testbyyuki.json").is_file():
-            print('database exist')
             self.readStore()
-        else: print('database not exist')
 
     def readStore(self):  # yuki
         with open('testbyyuki.json','r') as infile:
@@ -120,7 +118,7 @@ class Store:
                              'transactionDate': order.getTransactionDate().strftime("%Y-%m-%d-%H-%M-%S")}
                 ordersOfCustomer.append(orderData)
             currStore['orderHistory'][customerId] = ordersOfCustomer
-        ## write currstore into json
+        # write currstore into json
         with open('testbyyuki.json','w') as outfile:
             json.dump(currStore, outfile)
 

@@ -233,7 +233,7 @@ class StoreController:
             + str(totalQ))
         valid = False
         while not valid:
-            results = UserInterface.displayForm("Deduct the quantity BY this amount: ", [('Quantity', 'number')]) #input
+            results = UserInterface.displayForm("Deduct the quantity BY this amount: ", [('Quantity', 'number')])
             newQuantity = float(results[0])
             if newQuantity <= totalQ:
                 valid = True
@@ -304,7 +304,7 @@ class StoreController:
             if choice == "x" or choice == "X":
                 validInput = True
                 return None
-                #The end of this method
+                # The end of this method
             else:
                 matchIndex = 0
                 stop = False
@@ -318,7 +318,6 @@ class StoreController:
                 else:
                     validInput = True
                     return matchingList[matchIndex].getId()
-                    #self.viewProductByPrice(matchingList[matchIndex].getId())
 
     def viewProductByPrice(self, productId):
         product = self.store.getProduct(productId)
@@ -386,7 +385,7 @@ class StoreController:
     def addToCart(self, productId, priceGroup):
         toAdd = UserInterface.displayConfirm("", "Do you wish to add this Product into shopping cart?")
         if toAdd in ['y', 'Y']:
-            # check input, addto cart
+            # check input, add to cart
 
             acPrice, pQuantity = None, None
             UserInterface.writeLine("input the price you want. enter 9999 to quit.")
@@ -420,15 +419,16 @@ class StoreController:
         UserInterface.displayList("Products in Shopping Cart", listToBeDisplayed, "", False)
         if len(listToBeDisplayed) == 0:
             UserInterface.writeLine('no product yet')
-        co = UserInterface.displayConfirm('Do you wish to check out?','')
-        if co in ['y','Y']:
-            insufficientProduct = self.checkOut()
-            if insufficientProduct != None:
-                print(insufficientProduct)  # TODO
-        co = UserInterface.displayConfirm('Do you wish to modify shopping cart?','')
-        if co in ['y','Y']:
-            print('modify                      sc')
-                    
+        else:
+            co = UserInterface.displayConfirm('Do you wish to check out?','')
+            if co in ['y','Y']:
+                insufficientProduct = self.checkOut()
+                if insufficientProduct != None:
+                    print(insufficientProduct)  # TODO
+                    co = UserInterface.displayConfirm('Do you wish to modify shopping cart?','')
+                    if co in ['y','Y']:
+                        print('modify                      sc')
+
 
     def viewAllProductID(self):
         toBeDisplayed = []
