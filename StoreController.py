@@ -14,7 +14,7 @@ class StoreController:
                                            [('Name', 'nstring'), ('Unit of Measure', 'nstring')
                                                , ('Price per unit', 'money'), ('Source/Origin', 'nstring')
                                                , ('shelfLife', 'int')])
-        self.store.addProduct(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
+        self.store.addProduct(inputs[0], inputs[1], float(inputs[2]), inputs[3], int(inputs[4]))
         self.store.writeStore()
         UserInterface.writeLine("Product added.")
 
@@ -135,7 +135,7 @@ class StoreController:
     def restockProduct(self,productId):
         quantity = UserInterface.displayForm("Input how much you wanna restock: ", \
                                                [("restock quantity","number")])
-        self.store.getProduct(productId).addBatch(int(quantity[0]))
+        self.store.getProduct(productId).addBatch(float(quantity[0]))
 
     def editBatch(self,productId, batchId):
         valid = False
@@ -618,7 +618,7 @@ class StoreController:
                     self.store.editProductSource(productId, newData[0])
                 elif select[0].upper().strip() == 'D':
                     newData = UserInterface.displayForm('input new price:', [('', 'money')])
-                    self.store.editProductOriginalPrice(productId, newData[0])
+                    self.store.editProductOriginalPrice(productId, float(newData[0]))
                 elif select[0].upper().strip() == 'E':
                     self.restockProduct(productId)
                 elif select[0].upper().strip() == 'F':
