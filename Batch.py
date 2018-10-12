@@ -48,7 +48,7 @@ class Batch:
         self.batchID = batchID
 
     def setExpiryDate(self, daysTilExpiry):
-        self.expiryDate = self.shelfDate + datetime.timedelta(days= daysTilExpiry)
+        self.expiryDate = self.shelfDate + datetime.timedelta(days= int(daysTilExpiry))  #ML removed 
 
     def setShelfDate(self, shelfDate):
         self.shelfDate = shelfDate
