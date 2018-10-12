@@ -1,0 +1,5 @@
+{"products": [{"id": "2", "name": "banana", "unit": "kg", "originalPrice": 3, "source": "China", "shelfLife": 5, "batch": [{"batchId": "1", "shelfDate": "2018-10-08", "expiryDate": "2018-10-13", "actualPrice": 4.0, "quantity": 15.0}]}]
+,"customers": [{"id": "1", "password": "cs1", "name": "cs1", "phoneNumber": "0450563312", "address": "add1", "shoppingCart": [["1", 1.5, 4], ["3", 3.89, 10]], "balance": 0}]
+,"owner": {"id": "owner", "password": "owner", "name": "owner"}
+,"orderHistory": {"1": [{"orderId": "1", "customerId": "1", "shoppingCart": [["1", 1.5, 4], ["3", 3.89, 10]], "totalPrice": 44.9, "transactionDate": "2018-10-08-23-32-14"}]}
+}
