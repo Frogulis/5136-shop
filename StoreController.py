@@ -511,6 +511,7 @@ class StoreController:
             if toDiscount in ['y','Y']:
                 for pid in expIds:
                     self.store.getProduct(pid).updateDiscount()
+                    self.store.getProduct(pid).deleteExpiredProducts()
         else:
             UserInterface.writeLine("Good news! There are no expiring products")
 

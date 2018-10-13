@@ -64,6 +64,15 @@ class Product:
         for batch in batchIndexToBeDel:
             self.batches.remove(batch)
 
+    def deleteExpiredProducts(self):
+        i = 0
+        while i < len(self.batches):
+            if self.batches[i].getExpiryDate() < datetime.date.today():
+                del self.batches[i]
+            else:
+                i += 1
+    
+
     def setId(self, my_id):
         self.id = my_id
 
