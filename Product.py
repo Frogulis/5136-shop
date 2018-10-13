@@ -147,9 +147,8 @@ class Product:
         return total
 
     def updateDiscount(self):
-        #if len(self.batches) > 0:
         for batch in self.batches:
-            batch.setActualPrice(round(batch.getDiscount() * self.originalPrice,2))
+            batch.setActualPrice(round(batch.getDiscount() * self.getOriginalPrice(),2))
         raise Exception("This product has no batches.")
 
     # return total quantity of that particular price
