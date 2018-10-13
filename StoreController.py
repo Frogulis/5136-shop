@@ -377,7 +377,7 @@ class StoreController:
         if confirm.lower() == 'y' and len(batchIds) > 0:
             while True:
                 batchId = UserInterface.displayForm("Batch Id", [("Please input the batchID you would like to edit.","number")])[0]
-                print(batchIds)
+                #print(batchIds)
                 if batchId in batchIds:
                     self.editBatch(productId,batchId)
                     break
