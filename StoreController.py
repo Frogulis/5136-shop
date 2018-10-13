@@ -507,7 +507,7 @@ class StoreController:
                     expIds.append(p.getId())
         if len(paired) > 0:
             UserInterface.displayList("Expiring product batches", paired, "", False)
-            toDiscount = UserInterface.displayConfirm("Do you wish to discount these products? ", "")
+            toDiscount = UserInterface.displayConfirm("Do you wish to discount these products and delete expired batches? ", "")
             if toDiscount in ['y','Y']:
                 for pid in expIds:
                     self.store.getProduct(pid).updateDiscount()
