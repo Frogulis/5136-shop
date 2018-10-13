@@ -120,7 +120,7 @@ class Store:
             currStore['orderHistory'][customerId] = ordersOfCustomer
         # write currstore into json
         with open('database.json','w') as outfile:
-            json.dump(currStore, outfile)
+            json.dump(currStore, outfile, indent=4)
 
     def addProduct(self, name, unit, originalPrice, source, shelfLife):
         pid = self.generateNewProductId()
