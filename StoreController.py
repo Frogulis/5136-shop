@@ -96,8 +96,8 @@ class StoreController:
             orders = self.store.getCustomerOrders(uid)
 
         if len(orders) > 0:
-            displayOrders = [("{}:{} -- {}".format(o.getCustomerId(), o.getOrderId(), str(o.transactionDate)),
-                str(o.getShoppingCart()) + str(o.getTotalPrice())) for o in orders]
+            displayOrders = [("Order ID: {}.{} -- {}".format(o.getCustomerId(), o.getOrderId(), str(o.transactionDate)),
+                str(o.getShoppingCart()) + "Total price: {}".format(str(o.getTotalPrice()))) for o in orders]
             UserInterface.displayList("Orders", displayOrders, "", False)
         else:
             UserInterface.writeLine("No orders to display for customer {}".format(decision))

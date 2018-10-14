@@ -80,7 +80,7 @@ class ShoppingCart:
         output = "Items:\n"
         for item in self.productsInCart:
             output = output + \
-                "Item name: {}, ".format(item[0]) + \
+                "Item ID: {}, ".format(item[0]) + \
                 "Item price: {}, ".format(item[1]) + \
                 "Item quantity: {}, ".format(item[2]) + \
                 "\n"
