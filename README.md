@@ -1,10 +1,3 @@
-# 5136-Monash Fruit and Vegie Shop
-fruit shop
-<<<<<<< HEAD
-# hi from Michelle
-=======
+# 5136-Monash Fruit and Veggie Shop
 
-# hi from Kayoung
-  
-  
->>>>>>> d757bf02b1a33b41429436fe18c76af4bc88257b
+Fruit shop software designed and developed for FIT5136.
